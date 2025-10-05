@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 
+// ✅ Use your environment variable for API base URL
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5001/api";
+
 export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({});
@@ -30,7 +35,8 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
       };
 
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5001/api/expenses/${exp._id}`, {
+
+      const res = await fetch(`${API_BASE_URL}/expenses/${exp._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +51,7 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
       onUpdate(data.data);
       setEditingId(null);
     } catch (err) {
-      console.error(" Failed to save expense:", err);
+      console.error("❌ Failed to save expense:", err);
       alert("Failed to save changes.");
     }
   };
@@ -53,9 +59,11 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
   const deleteExpense = async (id) => {
     if (!window.confirm("Are you sure you want to delete this expense?"))
       return;
+
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5001/api/expenses/${id}`, {
+
+      const res = await fetch(`${API_BASE_URL}/expenses/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
@@ -66,7 +74,7 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
 
       onDelete(id);
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error("❌ Delete error:", err);
       alert("Failed to delete expense.");
     }
   };

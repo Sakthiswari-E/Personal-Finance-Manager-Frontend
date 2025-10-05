@@ -2,23 +2,26 @@ import axios from "axios";
 
 //  Base API setup
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001/api",
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "http://localhost:5001/api", // fallback for local dev
   headers: { "Content-Type": "application/json" },
 });
 
-// Attach token automatically
+//  Automatically attach token
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Handle expired access tokens via refresh
+//  Handle expired access tokens via refresh token flow
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    // Refresh if token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
@@ -30,11 +33,14 @@ API.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          "http://localhost:5001/api/auth/refresh",
+          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api"}/auth/refresh`,
           { refreshToken }
         );
 
+        // Save new token
         localStorage.setItem("token", data.token);
+
+        // Retry the original request with new token
         originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
         return API(originalRequest);
       } catch (err) {
@@ -71,7 +77,6 @@ export const addExpense = (data) => API.post("/expenses", data);
 export const deleteExpense = (id) => API.delete(`/expenses/${id}`);
 
 /* -------------------- GOALS -------------------- */
-
 export const getGoals = () => API.get("/goals");
 export const addGoal = (data) =>
   API.post("/goals", {
@@ -94,3 +99,7 @@ export const getForecast = (historyMonths = 6, forecastMonths = 6) =>
   API.get(
     `/forecast?historyMonths=${historyMonths}&forecastMonths=${forecastMonths}`
   );
+
+/* -------------------- PROFILE -------------------- */
+export const getProfile = () => API.get("/profile");
+export const updateProfile = (data) => API.put("/profile", data);

@@ -1,9 +1,14 @@
 import axios from "axios";
 
+//  Use environment variable or fallback to localhost
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", 
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "http://localhost:5001/api", // your local port (adjust if needed)
+  headers: { "Content-Type": "application/json" },
 });
 
+// Automatically attach token
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");

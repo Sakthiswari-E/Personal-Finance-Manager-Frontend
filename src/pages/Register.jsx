@@ -10,12 +10,16 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  //  Use environment variable or fallback to localhost for dev
+  const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
+      const res = await axios.post(`${API_BASE}/api/auth/register`, {
         name,
         email,
         password,
@@ -23,7 +27,7 @@ export default function Register() {
 
       console.log("Register response:", res.data);
 
-      // Handle both token styles
+      // Handle both token styles (token or accessToken)
       const token = res.data.token || res.data.accessToken;
 
       if (!token) {

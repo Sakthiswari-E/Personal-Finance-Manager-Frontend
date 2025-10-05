@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Bell } from "lucide-react"; // make sure lucide-react is installed
+import { Bell } from "lucide-react"; 
 import toast from "react-hot-toast";
 
 export default function NavbarLayout() {

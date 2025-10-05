@@ -27,7 +27,7 @@ export default function Goals() {
       setGoals(data);
     } catch (err) {
       console.error(
-        "❌ [loadGoals] error:",
+        " [loadGoals] error:",
         err?.response?.data || err.message
       );
       toast.error("Failed to load goals");
@@ -62,7 +62,7 @@ export default function Goals() {
     setSaving(true);
     try {
       if (editingId) {
-        // 🔁 Update goal
+        //  Update goal
         const res = await updateGoal(editingId, payload);
         const updatedGoal = res.data?.goal || res.data;
         setGoals((prev) =>
@@ -71,7 +71,7 @@ export default function Goals() {
         toast.success("Goal updated successfully");
         setEditingId(null);
       } else {
-        // ➕ Add new goal
+        //  Add new goal
         const res = await addGoal(payload);
         const newGoal = res.data?.goal || res.data;
         setGoals((prev) => [newGoal, ...prev]);

@@ -2,9 +2,14 @@ import React from "react";
 
 export default function Reports() {
   const token = localStorage.getItem("token");
-  const base = "http://localhost:5001/api/export";
+
+  // Use environment variable for backend base URL
+  const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+  const base = `${API_BASE}/api/export`;
 
   const handleExport = (path) => {
+    // Include token as query param for download routes
     window.open(`${base}/${path}?token=${token}`, "_blank");
   };
 

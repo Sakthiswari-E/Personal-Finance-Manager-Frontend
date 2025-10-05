@@ -8,12 +8,16 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  //  Use environment variable or fallback for local dev
+  const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5001/api/auth/login", {
+      const res = await axios.post(`${API_BASE}/api/auth/login`, {
         email,
         password,
       });
