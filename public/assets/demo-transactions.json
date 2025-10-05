@@ -1,7 +1,0 @@
-[
-  {"type":"income","amount":5000,"date":"2025-09-01T00:00:00Z","category":"Salary","description":"September salary"},
-  {"type":"expense","amount":1200,"date":"2025-09-01T00:00:00Z","category":"Rent","description":"Monthly rent"},
-  {"type":"expense","amount":250,"date":"2025-09-03T00:00:00Z","category":"Shopping","description":"Clothes"},
-  {"type":"expense","amount":15.5,"date":"2025-09-10T00:00:00Z","category":"Groceries","description":"Milk & eggs"},
-  {"type":"expense","amount":9.99,"date":"2025-09-05T00:00:00Z","category":"Entertainment","description":"Streaming"}
-]
