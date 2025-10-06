@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-
-// ✅ Use your environment variable for API base URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:5001/api";
+import { updateExpense, deleteExpense as deleteExpenseAPI } from "../lib/api"; 
 
 export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
   const [editingId, setEditingId] = useState(null);
@@ -24,8 +20,12 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
     setFormData({});
   };
 
+ 
   const saveEdit = async (exp) => {
     try {
+      const id = exp._id || exp.id;
+      if (!id) throw new Error("Missing expense ID for update");
+
       const updatedExpense = {
         ...exp,
         amount: Number(formData.amount),
@@ -34,51 +34,38 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
         description: formData.description,
       };
 
-      const token = localStorage.getItem("token");
+      const res = await updateExpense({ ...updatedExpense, _id: id });
 
-      const res = await fetch(`${API_BASE_URL}/expenses/${exp._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-        body: JSON.stringify(updatedExpense),
-      });
+      if (res?.data?.data) onUpdate(res.data.data);
+      else if (res?.data) onUpdate(res.data);
 
-      if (!res.ok) throw new Error("Failed to update expense");
-
-      const data = await res.json();
-      onUpdate(data.data);
       setEditingId(null);
     } catch (err) {
-      console.error("❌ Failed to save expense:", err);
+      console.error(" Failed to save expense:", err);
       alert("Failed to save changes.");
     }
   };
 
-  const deleteExpense = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this expense?"))
+
+  const deleteExpense = async (exp) => {
+    const id = exp._id || exp.id;
+    if (!id) {
+      alert("Missing expense ID — cannot delete.");
       return;
+    }
+
+    if (!window.confirm("Are you sure you want to delete this expense?")) return;
 
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${API_BASE_URL}/expenses/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
-
-      if (!res.ok) throw new Error("Failed to delete expense");
-
+      await deleteExpenseAPI(exp);
       onDelete(id);
     } catch (err) {
-      console.error("❌ Delete error:", err);
+      console.error(" Delete error:", err);
       alert("Failed to delete expense.");
     }
   };
 
+  
   if (expenses.length === 0) {
     return (
       <div className="text-sm text-gray-500 bg-white p-4 rounded shadow">
@@ -92,11 +79,12 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
       <h2 className="font-medium mb-3">Expenses</h2>
       <ul className="space-y-3">
         {expenses.map((exp) => {
-          const isEditing = editingId === (exp._id || exp.id);
+          const id = exp._id || exp.id;
+          const isEditing = editingId === id;
 
           return (
             <li
-              key={exp._id || exp.id}
+              key={id}
               className="flex items-center justify-between p-2 border rounded"
             >
               <div className="flex-1">
@@ -193,7 +181,7 @@ export default function ExpensesList({ expenses = [], onDelete, onUpdate }) {
                     </button>
                     <button
                       className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded"
-                      onClick={() => deleteExpense(exp._id || exp.id)}
+                      onClick={() => deleteExpense(exp)}
                     >
                       Delete
                     </button>
