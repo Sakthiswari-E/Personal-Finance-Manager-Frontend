@@ -13,17 +13,18 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
 
       if (!refreshToken) {
+        console.warn("⚠️ No refresh token — redirecting to login");
         window.location.href = "/login";
         return Promise.reject(error);
       }
@@ -34,10 +35,15 @@ API.interceptors.response.use(
           { refreshToken }
         );
 
-        localStorage.setItem("token", data.token);
-        originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
-        return API(originalRequest);
+        if (data?.token) {
+          localStorage.setItem("token", data.token);
+          originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
+          return API(originalRequest); 
+        } else {
+          throw new Error("No token in refresh response");
+        }
       } catch (err) {
+        console.error("Refresh token invalid:", err.message);
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";
@@ -64,7 +70,24 @@ export const deleteBudget = (id) => API.delete(`/budgets/${id}`);
 
 export const getExpenses = () => API.get("/expenses");
 export const addExpense = (data) => API.post("/expenses", data);
-export const deleteExpense = (id) => API.delete(`/expenses/${id}`);
+
+export const deleteExpense = (expense) => {
+  const id = expense?._id || expense?.id;
+  if (!id) {
+    console.error(" Missing expense ID for deletion:", expense);
+    throw new Error("Missing expense ID");
+  }
+  return API.delete(`/expenses/${id}`);
+};
+
+export const updateExpense = (expense) => {
+  const id = expense?._id || expense?.id;
+  if (!id) {
+    console.error(" Missing expense ID for update:", expense);
+    throw new Error("Missing expense ID");
+  }
+  return API.put(`/expenses/${id}`, expense);
+};
 
 export const getGoals = () => API.get("/goals");
 export const addGoal = (data) =>
