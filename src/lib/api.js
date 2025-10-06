@@ -1,27 +1,24 @@
 import axios from "axios";
 
-//  Base API setup
 const API = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_BASE_URL ||
-    "http://localhost:5001/api", // fallback for local dev
+  baseURL: import.meta.env.VITE_API_BASE_URL
+    ? `${import.meta.env.VITE_API_BASE_URL}/api`
+    : "http://localhost:5001/api",
   headers: { "Content-Type": "application/json" },
 });
 
-//  Automatically attach token
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-//  Handle expired access tokens via refresh token flow
+
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Refresh if token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
@@ -33,14 +30,11 @@ API.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api"}/auth/refresh`,
+          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5001"}/api/auth/refresh`,
           { refreshToken }
         );
 
-        // Save new token
         localStorage.setItem("token", data.token);
-
-        // Retry the original request with new token
         originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
         return API(originalRequest);
       } catch (err) {
@@ -57,26 +51,21 @@ API.interceptors.response.use(
 
 export default API;
 
-/* -------------------- AUTH -------------------- */
 export const registerUser = (data) => API.post("/auth/register", data);
 export const loginUser = (data) => API.post("/auth/login", data);
 
-/* -------------------- TRANSACTIONS -------------------- */
 export const getTransactions = () => API.get("/transactions");
 export const addTransaction = (data) => API.post("/transactions", data);
 
-/* -------------------- BUDGETS -------------------- */
 export const getBudgets = () => API.get("/budgets");
 export const addBudget = (data) => API.post("/budgets", data);
 export const updateBudget = (id, data) => API.put(`/budgets/${id}`, data);
 export const deleteBudget = (id) => API.delete(`/budgets/${id}`);
 
-/* -------------------- EXPENSES -------------------- */
 export const getExpenses = () => API.get("/expenses");
 export const addExpense = (data) => API.post("/expenses", data);
 export const deleteExpense = (id) => API.delete(`/expenses/${id}`);
 
-/* -------------------- GOALS -------------------- */
 export const getGoals = () => API.get("/goals");
 export const addGoal = (data) =>
   API.post("/goals", {
@@ -94,12 +83,8 @@ export const updateGoal = (id, data) =>
   });
 export const deleteGoal = (id) => API.delete(`/goals/${id}`);
 
-/* -------------------- FORECAST -------------------- */
 export const getForecast = (historyMonths = 6, forecastMonths = 6) =>
-  API.get(
-    `/forecast?historyMonths=${historyMonths}&forecastMonths=${forecastMonths}`
-  );
+  API.get(`/forecast?historyMonths=${historyMonths}&forecastMonths=${forecastMonths}`);
 
-/* -------------------- PROFILE -------------------- */
 export const getProfile = () => API.get("/profile");
 export const updateProfile = (data) => API.put("/profile", data);
