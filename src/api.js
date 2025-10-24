@@ -2,7 +2,7 @@
 import axios from "axios";
 
 //  Correct backend API base URL
-const raw = import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, "") || "http://localhost:5002/";
+const raw = import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, "") || "http://localhost:5002/api";
 const baseURL = `${raw}/api`; 
 console.log("✅ API baseURL:", baseURL);
 
