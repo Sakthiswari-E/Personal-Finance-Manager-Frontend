@@ -31,7 +31,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Toggle Button */}
+      {/* Toggle Button - Mobile */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-teal-500 text-white rounded-md shadow-md"
         onClick={() => setIsOpen(true)}
@@ -50,9 +50,9 @@ export default function Sidebar() {
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -260 }}
-        animate={{ x: isOpen ? 0 : 0 }} // ✅ Always visible on desktop
+        animate={{ x: isOpen ? 0 : -260 }} // ✅ Mobile slide
         transition={{ duration: 0.3 }}
-        className="fixed md:static md:translate-x-0 left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50"
+        className="fixed md:static left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50 md:translate-x-0 md:transform-none"
       >
         <div className="flex justify-between items-center px-6 mb-8">
           <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
