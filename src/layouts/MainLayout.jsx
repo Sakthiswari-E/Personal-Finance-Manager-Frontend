@@ -1,3 +1,4 @@
+// frontend/src/layouts/MainLayout.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -8,25 +9,19 @@ export default function MainLayout({ children }) {
   const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   return (
-    <div className="flex min-h-screen bg-[#0B1120] text-gray-100">
-      {/* Sidebar (hidden only on login/register) */}
-      {!hideSidebar && (
-        <aside className="w-60 fixed left-0 top-0 h-full z-40 bg-[#0a0a0a]">
-          <Sidebar />
-        </aside>
-      )}
+    <div className="flex bg-[#0B1120] text-gray-100 min-h-screen">
+      {/* ✅ Show Sidebar only when logged in */}
+      {!hideSidebar && <Sidebar />}
 
-      {/* Page Content */}
+      {/* ✅ Page Content Area */}
       <main
-        className={`flex-1 min-h-screen overflow-y-auto p-6 transition-all duration-300 ${
-          !hideSidebar ? "md:ml-60" : ""
-        }`}
+        className={`flex-1 px-4 md:px-6 pb-6 min-h-screen overflow-y-auto transition-all duration-300
+          ${!hideSidebar ? "md:ml-60 pt-14 md:pt-0" : ""}`}
       >
         {children}
       </main>
     </div>
   );
 }
-
 
 
