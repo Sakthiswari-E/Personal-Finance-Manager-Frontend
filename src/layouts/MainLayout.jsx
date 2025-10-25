@@ -10,16 +10,16 @@ export default function MainLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-[#0B1120] text-gray-100">
-      {/* Sidebar (always on desktop, toggle on mobile) */}
+      {/* ✅ Sidebar (show on all pages except login/register) */}
       {!hideSidebar && (
-        <div className="fixed md:static w-60 h-full z-40">
+        <aside className="w-60 fixed left-0 top-0 h-full z-40">
           <Sidebar />
-        </div>
+        </aside>
       )}
 
-      {/* Main Content */}
+      {/* ✅ Page Content */}
       <main
-        className={`flex-1 p-6 overflow-y-auto transition-all duration-300 ${
+        className={`flex-1 min-h-screen overflow-y-auto p-6 transition-all duration-300 ${
           !hideSidebar ? "md:ml-60" : ""
         }`}
       >
@@ -28,4 +28,5 @@ export default function MainLayout({ children }) {
     </div>
   );
 }
+
 

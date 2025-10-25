@@ -1,4 +1,3 @@
-// frontend/src/components/Sidebar.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
@@ -31,7 +30,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ✅ Toggle button only for MOBILE */}
+      {/* Mobile Toggle Button */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-teal-500 text-white rounded-md shadow-md"
         onClick={() => setIsOpen(true)}
@@ -39,7 +38,7 @@ export default function Sidebar() {
         <Menu size={22} />
       </button>
 
-      {/* ✅ Background overlay for mobile */}
+      {/* Mobile Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -47,18 +46,15 @@ export default function Sidebar() {
         ></div>
       )}
 
-      {/* ✅ Sidebar - ALWAYS visible on desktop */}
+      {/* Sidebar (fixed on desktop) */}
       <motion.aside
-        initial={{ x: -250 }}
-        animate={{ x: isOpen ? 0 : -250 }}
+        initial={{ x: -260 }}
+        animate={{ x: isOpen ? 0 : -260 }}
         transition={{ duration: 0.3 }}
-        className="fixed md:static left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50
-                   md:translate-x-0 md:shadow-none"
+        className="fixed md:fixed left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50"
       >
-        {/* Header */}
         <div className="flex justify-between items-center px-6 mb-8">
           <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
-          {/* Close button for mobile */}
           <button
             className="md:hidden text-gray-400 hover:text-white"
             onClick={() => setIsOpen(false)}
@@ -67,13 +63,12 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Links */}
         <nav className="flex flex-col gap-2 px-4">
           {links.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              onClick={() => setIsOpen(false)} // Close menu on mobile
+              onClick={() => setIsOpen(false)}
               className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${
                 pathname === item.path
                   ? "bg-teal-500/20 text-teal-400"
@@ -86,7 +81,6 @@ export default function Sidebar() {
           ))}
         </nav>
 
-        {/* Logout */}
         <button
           onClick={logout}
           className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all px-6 py-3 rounded-lg mx-4 mt-auto"
