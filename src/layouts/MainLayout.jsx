@@ -18,8 +18,7 @@ export default function MainLayout({ children }) {
       {/* Page Content */}
       <main
         className={`flex-1 p-6 overflow-y-auto transition-all duration-300 ${
-       
-          !hideSidebar ? "md:ml-60" : ""
+          !hideSidebar ? "md:pl-60" : ""
         }`}
       >
         {children}
