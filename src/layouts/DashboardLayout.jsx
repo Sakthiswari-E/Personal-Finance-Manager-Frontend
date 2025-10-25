@@ -1,3 +1,4 @@
+//frontend\src\layouts\DashboardLayout.jsx
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 

@@ -10,17 +10,17 @@ export default function MainLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-[#0B1120] text-gray-100">
-      {/* Sidebar */}
+      {/* Sidebar (always on desktop, toggle on mobile) */}
       {!hideSidebar && (
-        <div className="fixed md:static left-0 top-0 z-40">
+        <div className="fixed md:static w-60 h-full z-40">
           <Sidebar />
         </div>
       )}
 
-      {/* Page Content */}
+      {/* Main Content */}
       <main
         className={`flex-1 p-6 overflow-y-auto transition-all duration-300 ${
-          !hideSidebar ? "md:pl-60" : ""
+          !hideSidebar ? "md:ml-60" : ""
         }`}
       >
         {children}

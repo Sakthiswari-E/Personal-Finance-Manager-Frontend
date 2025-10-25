@@ -31,7 +31,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* 🔥 Mobile Toggle Button */}
+      {/* ✅ Toggle button only for MOBILE */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-teal-500 text-white rounded-md shadow-md"
         onClick={() => setIsOpen(true)}
@@ -39,7 +39,7 @@ export default function Sidebar() {
         <Menu size={22} />
       </button>
 
-      {/* 🔥 Sidebar Overlay (Mobile Only) */}
+      {/* ✅ Background overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -47,18 +47,18 @@ export default function Sidebar() {
         ></div>
       )}
 
-      {/* ✅ Sidebar */}
+      {/* ✅ Sidebar - ALWAYS visible on desktop */}
       <motion.aside
         initial={{ x: -250 }}
         animate={{ x: isOpen ? 0 : -250 }}
-        transition={{ duration: 0.4 }}
-        className="fixed left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg md:translate-x-0 z-50 md:z-0 md:relative flex flex-col py-6"
+        transition={{ duration: 0.3 }}
+        className="fixed md:static left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50
+                   md:translate-x-0 md:shadow-none"
       >
         {/* Header */}
         <div className="flex justify-between items-center px-6 mb-8">
           <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
-
-          {/* Close Button for mobile */}
+          {/* Close button for mobile */}
           <button
             className="md:hidden text-gray-400 hover:text-white"
             onClick={() => setIsOpen(false)}
@@ -73,7 +73,7 @@ export default function Sidebar() {
             <Link
               key={item.path}
               to={item.path}
-              onClick={() => setIsOpen(false)} // Close on click mobile
+              onClick={() => setIsOpen(false)} // Close menu on mobile
               className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${
                 pathname === item.path
                   ? "bg-teal-500/20 text-teal-400"
@@ -98,3 +98,4 @@ export default function Sidebar() {
     </>
   );
 }
+
