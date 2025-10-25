@@ -31,79 +31,65 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ✅ MOBILE TOP NAV */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 z-50 flex items-center justify-between px-4 py-3">
-        <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
-        <button
-          className="text-gray-300"
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
-          {isOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
-      </div>
+      {/* Mobile Toggle Button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-teal-500 text-white rounded-md shadow-md"
+        onClick={() => setIsOpen(true)}
+      >
+        <Menu size={22} />
+      </button>
 
-      {/* ✅ MOBILE SLIDE DOWN MENU */}
+      {/* Mobile Overlay */}
       {isOpen && (
-        <motion.div
-          initial={{ height: 0 }}
-          animate={{ height: "auto" }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden fixed top-14 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 shadow-lg z-40 flex flex-col"
-        >
-          {links.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-3 px-6 py-3 transition ${
-                pathname === item.path
-                  ? "bg-teal-500/20 text-teal-400"
-                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
-              }`}
-            >
-              {item.icon}
-              {item.name}
-            </Link>
-          ))}
-          <button
-            onClick={logout}
-            className="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
-          >
-            <LogOut size={18} /> Logout
-          </button>
-        </motion.div>
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        ></div>
       )}
 
-      {/* ✅ DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex flex-col w-60 bg-[#0a0a0a] border-r border-gray-800 h-screen py-6 sticky top-0">
-        <h2 className="text-2xl text-teal-400 font-semibold px-6 mb-8">
-          PFM
-        </h2>
+      {/* Sidebar */}
+      <motion.aside
+        initial={{ x: -260 }}
+        animate={{ x: isOpen ? 0 : 0 }} // ✅ Always visible on desktop
+        transition={{ duration: 0.3 }}
+        className="fixed md:static md:translate-x-0 left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50"
+      >
+        <div className="flex justify-between items-center px-6 mb-8">
+          <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
+          <button
+            className="md:hidden text-gray-400 hover:text-white"
+            onClick={() => setIsOpen(false)}
+          >
+            <X size={22} />
+          </button>
+        </div>
 
         <nav className="flex flex-col gap-2 px-4">
           {links.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${
                 pathname === item.path
                   ? "bg-teal-500/20 text-teal-400"
                   : "text-gray-300 hover:bg-teal-500/10 hover:text-white"
               }`}
             >
               {item.icon}
-              {item.name}
+              <span>{item.name}</span>
             </Link>
           ))}
         </nav>
 
         <button
           onClick={logout}
-          className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition px-6 py-3 rounded-lg mt-auto mx-4"
+          className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all px-6 py-3 rounded-lg mx-4 mt-auto"
         >
-          <LogOut size={18} /> Logout
+          <LogOut size={18} />
+          <span>Logout</span>
         </button>
-      </aside>
+      </motion.aside>
     </>
   );
 }
