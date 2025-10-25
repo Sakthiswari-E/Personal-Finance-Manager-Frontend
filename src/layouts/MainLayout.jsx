@@ -12,11 +12,15 @@ export default function MainLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-[#0B1120] text-gray-100">
-      {/* Sidebar (visible only for logged-in routes) */}
+      {/* Sidebar visible only if user is inside dashboard pages */}
       {!hideSidebar && <Sidebar />}
 
       {/* Page Content */}
-      <main className={`flex-1 p-6 ${!hideSidebar ? "ml-60" : ""} overflow-y-auto`}>
+      <main
+        className={`flex-1 p-6 overflow-y-auto ${
+          !hideSidebar ? "md:ml-60" : ""
+        }`}
+      >
         {children}
       </main>
     </div>
