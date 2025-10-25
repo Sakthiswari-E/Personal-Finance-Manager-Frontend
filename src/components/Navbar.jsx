@@ -1,76 +1,91 @@
-// frontend/src/components/Navbar.jsx
+// frontend/src/components/Sidebar.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  BarChart3,
+  Wallet,
+  Settings,
+  ClipboardList,
+  Target,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
-export default function Navbar() {
+export default function Sidebar() {
   const { pathname } = useLocation();
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { logout } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const navLinks = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Expenses", path: "/expenses" },
-    { name: "Budgets", path: "/budgets" },
-    { name: "Reports", path: "/reports" },
-    { name: "Goals", path: "/goals" },
+  const links = [
+    { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
+    { name: "Expenses", icon: <Wallet size={18} />, path: "/expenses" },
+    { name: "Budgets", icon: <ClipboardList size={18} />, path: "/budgets" },
+    { name: "Reports", icon: <BarChart3 size={18} />, path: "/reports" },
+    { name: "Goals", icon: <Target size={18} />, path: "/goals" },
+    { name: "Settings", icon: <Settings size={18} />, path: "/settings" },
   ];
 
   return (
-    <motion.nav
-      className="w-full flex justify-between items-center px-8 py-4 bg-[#0d0d0d]/90 backdrop-blur-md border-b border-gray-800 fixed top-0 z-50"
-      initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      {/* Logo */}
-      <Link to="/dashboard" className="text-xl font-bold text-white tracking-wide hover:text-teal-400 transition">
-        💸 <span className="text-teal-400">PFM</span> Dashboard
-      </Link>
+    <>
+      {/* MOBILE MENU BUTTON */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="md:hidden fixed bottom-6 left-6 bg-teal-500 text-black p-3 rounded-full shadow-lg z-50"
+      >
+        {isOpen ? <X size={22} /> : <Menu size={22} />}
+      </button>
 
-      {/* Navigation Links */}
-      <div className="flex gap-6 items-center">
-        {navLinks.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`text-gray-400 hover:text-white transition ${
-              pathname === link.path ? "text-teal-400 font-semibold" : ""
-            }`}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </div>
-
-      {/* Notification + Settings + Logout */}
-      <div className="flex gap-6 items-center relative">
-        {/* 🔔 Notification Bell */}
-        <div className="relative">
-          <button
-            className="text-gray-400 hover:text-white transition relative"
-            onClick={() => setShowNotifications(!showNotifications)}
-          >
-            🔔
-            {/* Red dot (example unread notification indicator) */}
-            <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full"></span>
-          </button>
-
-          {/* Dropdown Notification Panel */}
-          {showNotifications && (
-            <div className="absolute right-0 mt-2 w-72 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-lg p-3">
-              <p className="text-gray-300 text-sm">No new notifications</p>
-            </div>
-          )}
+      {/* SIDEBAR */}
+      <motion.aside
+        className="h-screen w-60 bg-[#0a0a0a] border-r border-gray-800 fixed left-0 top-0 flex flex-col py-6 justify-between z-40
+             md:translate-x-0 md:static"
+        initial={{ x: -260 }}
+        animate={{ x: isOpen ? 0 : -260 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Header */}
+        <div>
+          <h2 className="text-xl text-teal-400 font-semibold px-6 mb-8">PFM</h2>
+          <nav className="flex flex-col gap-2 px-4">
+            {links.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${
+                  pathname === item.path
+                    ? "bg-teal-500/20 text-teal-400"
+                    : "text-gray-300 hover:bg-teal-500/10 hover:text-white"
+                }`}
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        {/* Settings Button */}
-        <button className="text-gray-400 hover:text-white transition">Settings</button>
-
         {/* Logout Button */}
-        <button className="bg-teal-500 hover:bg-teal-600 text-black px-4 py-2 rounded-lg font-medium transition">
-          Logout
+        <button
+          onClick={logout}
+          className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all px-6 py-3 rounded-lg mx-4"
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
         </button>
-      </div>
-    </motion.nav>
+      </motion.aside>
+
+      {/* BACKDROP when sidebar open (mobile only) */}
+      {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm md:hidden z-30"
+        ></div>
+      )}
+    </>
   );
 }
