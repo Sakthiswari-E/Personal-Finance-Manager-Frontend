@@ -31,25 +31,27 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* MOBILE MENU BUTTON */}
+      {/* MOBILE TOGGLE BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed bottom-6 left-6 bg-teal-500 text-black p-3 rounded-full shadow-lg z-50"
+        className="md:hidden fixed top-4 left-4 bg-teal-500 text-black p-2 rounded-md z-50"
       >
         {isOpen ? <X size={22} /> : <Menu size={22} />}
       </button>
 
       {/* SIDEBAR */}
       <motion.aside
-        className="h-screen w-60 bg-[#0a0a0a] border-r border-gray-800 fixed left-0 top-0 flex flex-col py-6 justify-between z-40
-             md:translate-x-0 md:static"
+        className="h-screen w-60 bg-[#0a0a0a] border-r border-gray-800 fixed top-0 left-0 flex flex-col justify-between py-6 z-40
+                   md:translate-x-0 md:static"
         initial={{ x: -260 }}
         animate={{ x: isOpen ? 0 : -260 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Header */}
+        {/* Logo */}
         <div>
-          <h2 className="text-xl text-teal-400 font-semibold px-6 mb-8">PFM</h2>
+          <h2 className="text-2xl font-bold text-teal-400 px-6 mb-6">PFM</h2>
+
+          {/* Navigation Links */}
           <nav className="flex flex-col gap-2 px-4">
             {links.map((item) => (
               <Link
@@ -69,7 +71,7 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* Logout Button */}
+        {/* Logout */}
         <button
           onClick={logout}
           className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all px-6 py-3 rounded-lg mx-4"
@@ -79,11 +81,11 @@ export default function Sidebar() {
         </button>
       </motion.aside>
 
-      {/* BACKDROP when sidebar open (mobile only) */}
+      {/* MOBILE OVERLAY */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm md:hidden z-30"
+          className="fixed inset-0 bg-black/50 md:hidden z-30"
         ></div>
       )}
     </>
