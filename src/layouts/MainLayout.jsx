@@ -1,4 +1,3 @@
-// frontend/src/layouts/MainLayout.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -10,14 +9,14 @@ export default function MainLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-[#0B1120] text-gray-100">
-      {/* ✅ Sidebar (show on all pages except login/register) */}
+      {/* Sidebar (hidden only on login/register) */}
       {!hideSidebar && (
-        <aside className="w-60 fixed left-0 top-0 h-full z-40">
+        <aside className="w-60 fixed left-0 top-0 h-full z-40 bg-[#0a0a0a]">
           <Sidebar />
         </aside>
       )}
 
-      {/* ✅ Page Content */}
+      {/* Page Content */}
       <main
         className={`flex-1 min-h-screen overflow-y-auto p-6 transition-all duration-300 ${
           !hideSidebar ? "md:ml-60" : ""
@@ -28,5 +27,6 @@ export default function MainLayout({ children }) {
     </div>
   );
 }
+
 
 

@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -21,7 +22,6 @@ export default function App() {
 
   const isAuthPage = ["/login", "/register"].includes(location.pathname);
 
-  // 🔄 Show loading screen while checking auth
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-900 text-teal-400">
@@ -45,13 +45,13 @@ export default function App() {
           },
           success: {
             iconTheme: {
-              primary: "#34D399", // teal-400
+              primary: "#34D399",
               secondary: "#0F172A",
             },
           },
           error: {
             iconTheme: {
-              primary: "#F87171", // red-400
+              primary: "#F87171",
               secondary: "#0F172A",
             },
           },
@@ -121,16 +121,8 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/"
-              element={
-                user ? (
-                  <Navigate to="/dashboard" replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
-              }
-            />
+            {/* ✅ Prevent blank page */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </MainLayout>
       )}

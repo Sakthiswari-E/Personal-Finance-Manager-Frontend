@@ -46,12 +46,12 @@ export default function Sidebar() {
         ></div>
       )}
 
-      {/* Sidebar (fixed on desktop) */}
+      {/* Sidebar */}
       <motion.aside
         initial={{ x: -260 }}
         animate={{ x: isOpen ? 0 : -260 }}
         transition={{ duration: 0.3 }}
-        className="fixed md:fixed left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50"
+        className="fixed left-0 top-0 h-full w-60 bg-[#0a0a0a] border-r border-gray-800 shadow-lg flex flex-col py-6 z-50"
       >
         <div className="flex justify-between items-center px-6 mb-8">
           <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
