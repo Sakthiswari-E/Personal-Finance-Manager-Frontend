@@ -426,38 +426,32 @@ export default function Expenses() {
             </option>
           ))}
         </select>
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-600 mb-1">
-            Date Range
-          </label>
+        <div className="flex gap-3">
+          <input
+            type="date"
+            placeholder="From"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="p-2 rounded-lg border"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#DCDCDC",
+              color: "#3B4A54",
+            }}
+          />
 
-          <div className="flex items-center gap-3">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="p-2 rounded-lg border"
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderColor: "#DCDCDC",
-                color: "#3B4A54",
-              }}
-            />
-
-            <span className="text-gray-500 font-medium">—</span>
-
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="p-2 rounded-lg border"
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderColor: "#DCDCDC",
-                color: "#3B4A54",
-              }}
-            />
-          </div>
+          <input
+            type="date"
+            placeholder="To"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="p-2 rounded-lg border"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#DCDCDC",
+              color: "#3B4A54",
+            }}
+          />
         </div>
 
         <button
