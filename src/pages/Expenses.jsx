@@ -1,6 +1,6 @@
 //frontend\src\pages\Expenses.jsx
 import React, { useState, useEffect } from "react";
-import api from "../api"; 
+import api from "../api";
 import { CATEGORIES } from "../constants";
 import {
   Chart,
@@ -89,7 +89,9 @@ export default function Expenses() {
       if (editingId) {
         // Update expense
         const res = await api.put(`/expenses/${editingId}`, form);
-        setExpenses(expenses.map((exp) => (exp._id === editingId ? res.data : exp)));
+        setExpenses(
+          expenses.map((exp) => (exp._id === editingId ? res.data : exp))
+        );
         showAlert("✅ Expense updated successfully!", "success");
       } else {
         // Add new expense
@@ -132,7 +134,8 @@ export default function Expenses() {
 
   // Delete expense
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this expense?")) return;
+    if (!window.confirm("Are you sure you want to delete this expense?"))
+      return;
     try {
       await api.delete(`/expenses/${id}`);
       setExpenses(expenses.filter((exp) => exp._id !== id));
@@ -144,442 +147,348 @@ export default function Expenses() {
     }
   };
 
-//   return (
-//     <div className="p-6 text-gray-100">
-//       <h1 className="text-2xl font-bold mb-6 text-emerald-400">
-//         {editingId ? "Edit Expense" : "Add Expense"}
-//       </h1>
+  //   return (
+  //     <div className="p-6 text-gray-100">
+  //       <h1 className="text-2xl font-bold mb-6 text-emerald-400">
+  //         {editingId ? "Edit Expense" : "Add Expense"}
+  //       </h1>
 
-//       {/* 🔔 Alert Message */}
-//       {message && (
-//         <div
-//           className={`p-3 mb-4 rounded-lg text-center font-medium ${
-//             message.type === "success"
-//               ? "bg-emerald-700 text-white"
-//               : message.type === "error"
-//               ? "bg-red-700 text-white"
-//               : message.type === "warning"
-//               ? "bg-yellow-600 text-black"
-//               : "bg-blue-600 text-white"
-//           }`}
-//         >
-//           {message.text}
-//         </div>
-//       )}
+  //       {/* 🔔 Alert Message */}
+  //       {message && (
+  //         <div
+  //           className={`p-3 mb-4 rounded-lg text-center font-medium ${
+  //             message.type === "success"
+  //               ? "bg-emerald-700 text-white"
+  //               : message.type === "error"
+  //               ? "bg-red-700 text-white"
+  //               : message.type === "warning"
+  //               ? "bg-yellow-600 text-black"
+  //               : "bg-blue-600 text-white"
+  //           }`}
+  //         >
+  //           {message.text}
+  //         </div>
+  //       )}
 
-//       {/* 🔍 Filter Section */}
-//       <div className="flex flex-wrap gap-3 mb-6">
-//         <select
-//           value={categoryFilter}
-//           onChange={(e) => setCategoryFilter(e.target.value)}
-//           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
-//         >
-//           <option value="">All Categories</option>
-//           {CATEGORIES.map((cat) => (
-//             <option key={cat} value={cat}>
-//               {cat}
-//             </option>
-//           ))}
-//         </select>
+  //       {/* 🔍 Filter Section */}
+  //       <div className="flex flex-wrap gap-3 mb-6">
+  //         <select
+  //           value={categoryFilter}
+  //           onChange={(e) => setCategoryFilter(e.target.value)}
+  //           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
+  //         >
+  //           <option value="">All Categories</option>
+  //           {CATEGORIES.map((cat) => (
+  //             <option key={cat} value={cat}>
+  //               {cat}
+  //             </option>
+  //           ))}
+  //         </select>
 
-//         <input
-//           type="date"
-//           value={startDate}
-//           onChange={(e) => setStartDate(e.target.value)}
-//           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
-//         />
+  //         <input
+  //           type="date"
+  //           value={startDate}
+  //           onChange={(e) => setStartDate(e.target.value)}
+  //           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
+  //         />
 
-//         <input
-//           type="date"
-//           value={endDate}
-//           onChange={(e) => setEndDate(e.target.value)}
-//           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
-//         />
+  //         <input
+  //           type="date"
+  //           value={endDate}
+  //           onChange={(e) => setEndDate(e.target.value)}
+  //           className="p-2 bg-[#0F172A] border border-[#334155] rounded-lg text-gray-200"
+  //         />
 
-//         <button
-//           onClick={fetchFilteredExpenses}
-//           className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-semibold"
-//         >
-//           Apply Filters
-//         </button>
-//       </div>
+  //         <button
+  //           onClick={fetchFilteredExpenses}
+  //           className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-semibold"
+  //         >
+  //           Apply Filters
+  //         </button>
+  //       </div>
 
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//         {/* 🧾 Expense Form */}
-//         <form
-//           onSubmit={handleSubmit}
-//           className="bg-[#1E293B] p-6 rounded-2xl shadow-lg border border-[#334155]"
-//         >
-//           <div className="mb-4">
-//             <label className="block mb-1 text-sm">Category</label>
-//             <select
-//               name="category"
-//               value={form.category}
-//               onChange={handleChange}
-//               className="w-full p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
-//               required
-//             >
-//               <option value="">Select a category</option>
-//               {CATEGORIES.map((cat) => (
-//                 <option key={cat} value={cat}>
-//                   {cat}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
+  //       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  //         {/* 🧾 Expense Form */}
+  //         <form
+  //           onSubmit={handleSubmit}
+  //           className="bg-[#1E293B] p-6 rounded-2xl shadow-lg border border-[#334155]"
+  //         >
+  //           <div className="mb-4">
+  //             <label className="block mb-1 text-sm">Category</label>
+  //             <select
+  //               name="category"
+  //               value={form.category}
+  //               onChange={handleChange}
+  //               className="w-full p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
+  //               required
+  //             >
+  //               <option value="">Select a category</option>
+  //               {CATEGORIES.map((cat) => (
+  //                 <option key={cat} value={cat}>
+  //                   {cat}
+  //                 </option>
+  //               ))}
+  //             </select>
+  //           </div>
 
-//           <div className="grid grid-cols-2 gap-4 mb-4">
-//             <input
-//               type="number"
-//               name="amount"
-//               placeholder="Amount"
-//               value={form.amount}
-//               onChange={handleChange}
-//               className="p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
-//               required
-//             />
-//             <input
-//               type="date"
-//               name="date"
-//               value={form.date}
-//               onChange={handleChange}
-//               className="p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
-//               required
-//             />
-//           </div>
+  //           <div className="grid grid-cols-2 gap-4 mb-4">
+  //             <input
+  //               type="number"
+  //               name="amount"
+  //               placeholder="Amount"
+  //               value={form.amount}
+  //               onChange={handleChange}
+  //               className="p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
+  //               required
+  //             />
+  //             <input
+  //               type="date"
+  //               name="date"
+  //               value={form.date}
+  //               onChange={handleChange}
+  //               className="p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
+  //               required
+  //             />
+  //           </div>
 
-//           <textarea
-//             name="description"
-//             placeholder="Description"
-//             value={form.description}
-//             onChange={handleChange}
-//             className="w-full mb-4 p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
-//           ></textarea>
+  //           <textarea
+  //             name="description"
+  //             placeholder="Description"
+  //             value={form.description}
+  //             onChange={handleChange}
+  //             className="w-full mb-4 p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
+  //           ></textarea>
 
-//           {/* Recurring Expense */}
-//           <div className="mb-4 flex items-center gap-2">
-//             <input
-//               type="checkbox"
-//               name="isRecurring"
-//               checked={form.isRecurring}
-//               onChange={handleChange}
-//             />
-//             <label>Recurring Expense</label>
-//           </div>
+  //           {/* Recurring Expense */}
+  //           <div className="mb-4 flex items-center gap-2">
+  //             <input
+  //               type="checkbox"
+  //               name="isRecurring"
+  //               checked={form.isRecurring}
+  //               onChange={handleChange}
+  //             />
+  //             <label>Recurring Expense</label>
+  //           </div>
 
-//           {form.isRecurring && (
-//             <div className="mb-4">
-//               <label className="block mb-1 text-sm">Recurrence Interval</label>
-//               <select
-//                 name="recurrenceInterval"
-//                 value={form.recurrenceInterval}
-//                 onChange={handleChange}
-//                 className="w-full p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
-//               >
-//                 <option value="">Select interval</option>
-//                 <option value="daily">Daily</option>
-//                 <option value="weekly">Weekly</option>
-//                 <option value="monthly">Monthly</option>
-//                 <option value="yearly">Yearly</option>
-//               </select>
-//             </div>
-//           )}
+  //           {form.isRecurring && (
+  //             <div className="mb-4">
+  //               <label className="block mb-1 text-sm">Recurrence Interval</label>
+  //               <select
+  //                 name="recurrenceInterval"
+  //                 value={form.recurrenceInterval}
+  //                 onChange={handleChange}
+  //                 className="w-full p-2 rounded-lg bg-[#0F172A] text-gray-200 border border-[#334155]"
+  //               >
+  //                 <option value="">Select interval</option>
+  //                 <option value="daily">Daily</option>
+  //                 <option value="weekly">Weekly</option>
+  //                 <option value="monthly">Monthly</option>
+  //                 <option value="yearly">Yearly</option>
+  //               </select>
+  //             </div>
+  //           )}
 
-//           <div className="flex gap-4">
-//             <button
-//               type="submit"
-//               className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg"
-//             >
-//               {editingId ? "Save Changes" : "Add Expense"}
-//             </button>
+  //           <div className="flex gap-4">
+  //             <button
+  //               type="submit"
+  //               className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg"
+  //             >
+  //               {editingId ? "Save Changes" : "Add Expense"}
+  //             </button>
 
-//             {editingId && (
-//               <button
-//                 type="button"
-//                 onClick={() => {
-//                   setEditingId(null);
-//                   setForm({
-//                     amount: "",
-//                     date: "",
-//                     category: "",
-//                     description: "",
-//                     isRecurring: false,
-//                     recurrenceInterval: "",
-//                   });
-//                 }}
-//                 className="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg"
-//               >
-//                 Cancel
-//               </button>
-//             )}
-//           </div>
-//         </form>
+  //             {editingId && (
+  //               <button
+  //                 type="button"
+  //                 onClick={() => {
+  //                   setEditingId(null);
+  //                   setForm({
+  //                     amount: "",
+  //                     date: "",
+  //                     category: "",
+  //                     description: "",
+  //                     isRecurring: false,
+  //                     recurrenceInterval: "",
+  //                   });
+  //                 }}
+  //                 className="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg"
+  //               >
+  //                 Cancel
+  //               </button>
+  //             )}
+  //           </div>
+  //         </form>
 
-//         {/*  Expense Table */}
-//         <div className="bg-[#1E293B] p-6 rounded-2xl shadow-lg border border-[#334155] overflow-x-auto">
-//           <table className="w-full text-gray-300">
-//             <thead>
-//               <tr className="text-emerald-400 border-b border-[#334155]">
-//                 <th className="py-2 text-left">Date</th>
-//                 <th className="py-2 text-left">Category</th>
-//                 <th className="py-2 text-left">Description</th>
-//                 <th className="py-2 text-left">Amount</th>
-//                 <th className="py-2 text-left">Recurring</th>
-//                 <th className="py-2 text-center">Actions</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {expenses.length > 0 ? (
-//                 expenses.map((exp) => (
-//                   <tr
-//                     key={exp._id}
-//                     className="border-b border-[#334155] hover:bg-[#0F172A]"
-//                   >
-//                     <td className="py-2">{exp.date?.slice(0, 10)}</td>
-//                     <td className="py-2">{exp.category}</td>
-//                     <td className="py-2">{exp.description || "—"}</td>
-//                     <td className="py-2 text-emerald-400 font-semibold">
-//                       ₹{exp.amount}
-//                     </td>
-//                     <td className="py-2">
-//                       {exp.isRecurring ? exp.recurrenceInterval : "—"}
-//                     </td>
-//                     <td className="py-2 text-center space-x-2">
-//                       <button
-//                         onClick={() => handleEdit(exp)}
-//                         className="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 rounded text-white"
-//                       >
-//                         Edit
-//                       </button>
-//                       <button
-//                         onClick={() => handleDelete(exp._id)}
-//                         className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 rounded text-white"
-//                       >
-//                         Delete
-//                       </button>
-//                     </td>
-//                   </tr>
-//                 ))
-//               ) : (
-//                 <tr>
-//                   <td colSpan="6" className="text-center py-4 text-gray-500">
-//                     No expenses recorded yet.
-//                   </td>
-//                 </tr>
-//               )}
-//             </tbody>
-//           </table>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+  //         {/*  Expense Table */}
+  //         <div className="bg-[#1E293B] p-6 rounded-2xl shadow-lg border border-[#334155] overflow-x-auto">
+  //           <table className="w-full text-gray-300">
+  //             <thead>
+  //               <tr className="text-emerald-400 border-b border-[#334155]">
+  //                 <th className="py-2 text-left">Date</th>
+  //                 <th className="py-2 text-left">Category</th>
+  //                 <th className="py-2 text-left">Description</th>
+  //                 <th className="py-2 text-left">Amount</th>
+  //                 <th className="py-2 text-left">Recurring</th>
+  //                 <th className="py-2 text-center">Actions</th>
+  //               </tr>
+  //             </thead>
+  //             <tbody>
+  //               {expenses.length > 0 ? (
+  //                 expenses.map((exp) => (
+  //                   <tr
+  //                     key={exp._id}
+  //                     className="border-b border-[#334155] hover:bg-[#0F172A]"
+  //                   >
+  //                     <td className="py-2">{exp.date?.slice(0, 10)}</td>
+  //                     <td className="py-2">{exp.category}</td>
+  //                     <td className="py-2">{exp.description || "—"}</td>
+  //                     <td className="py-2 text-emerald-400 font-semibold">
+  //                       ₹{exp.amount}
+  //                     </td>
+  //                     <td className="py-2">
+  //                       {exp.isRecurring ? exp.recurrenceInterval : "—"}
+  //                     </td>
+  //                     <td className="py-2 text-center space-x-2">
+  //                       <button
+  //                         onClick={() => handleEdit(exp)}
+  //                         className="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 rounded text-white"
+  //                       >
+  //                         Edit
+  //                       </button>
+  //                       <button
+  //                         onClick={() => handleDelete(exp._id)}
+  //                         className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 rounded text-white"
+  //                       >
+  //                         Delete
+  //                       </button>
+  //                     </td>
+  //                   </tr>
+  //                 ))
+  //               ) : (
+  //                 <tr>
+  //                   <td colSpan="6" className="text-center py-4 text-gray-500">
+  //                     No expenses recorded yet.
+  //                   </td>
+  //                 </tr>
+  //               )}
+  //             </tbody>
+  //           </table>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
+  return (
+    <div
+      className="p-6"
+      style={{ backgroundColor: "#F0F2F5", color: "#3B4A54" }}
+    >
+      <h1 className="text-2xl font-bold mb-6" style={{ color: "#111B21" }}>
+        {editingId ? "Edit Expense" : "Add Expense"}
+      </h1>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-return (
-  <div className="p-6" style={{ backgroundColor: "#F0F2F5", color: "#3B4A54" }}>
-    <h1 className="text-2xl font-bold mb-6" style={{ color: "#111B21" }}>
-      {editingId ? "Edit Expense" : "Add Expense"}
-    </h1>
-
-    {/* 🔔 Alert Message */}
-    {message && (
-      <div
-        className={`p-3 mb-4 rounded-lg text-center font-medium`}
-        style={{
-          backgroundColor:
-            message.type === "success"
-              ? "#24D366"
-              : message.type === "error"
-              ? "#ff4d4f"
-              : message.type === "warning"
-              ? "#fff3cd"
-              : "#cfe2ff",
-          color:
-            message.type === "warning" ? "#111B21" : "#ffffff",
-        }}
-      >
-        {message.text}
-      </div>
-    )}
-
-    {/* 🔍 Filter Section */}
-    <div className="flex flex-wrap gap-3 mb-6">
-      <select
-        value={categoryFilter}
-        onChange={(e) => setCategoryFilter(e.target.value)}
-        className="p-2 rounded-lg border"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderColor: "#DCDCDC",
-          color: "#3B4A54",
-        }}
-      >
-        <option value="">All Categories</option>
-        {CATEGORIES.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
-<div className="flex items-center gap-4">
-  <div className="flex flex-col">
-    <label className="text-sm font-medium text-gray-600 mb-1">From</label>
-    <input
-      type="date"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-      className="p-2 rounded-lg border"
-      style={{
-        backgroundColor: "#FFFFFF",
-        borderColor: "#DCDCDC",
-        color: "#3B4A54",
-      }}
-    />
-  </div>
-
-  <div className="flex flex-col">
-    <label className="text-sm font-medium text-gray-600 mb-1">To</label>
-    <input
-      type="date"
-      value={endDate}
-      onChange={(e) => setEndDate(e.target.value)}
-      className="p-2 rounded-lg border"
-      style={{
-        backgroundColor: "#FFFFFF",
-        borderColor: "#DCDCDC",
-        color: "#3B4A54",
-      }}
-    />
-  </div>
-</div>
-
-
-      <button
-        onClick={fetchFilteredExpenses}
-        className="px-4 py-2 rounded-lg font-semibold"
-        style={{
-          backgroundColor: "#24D366",
-          color: "#FFFFFF",
-        }}
-      >
-        Apply Filters
-      </button>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* 🧾 Expense Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="p-6 rounded-2xl shadow"
-        style={{
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #DCDCDC",
-        }}
-      >
-        <div className="mb-4">
-          <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
-            Category
-          </label>
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            className="w-full p-2 rounded-lg border"
-            style={{
-              backgroundColor: "#FFFFFF",
-              borderColor: "#DCDCDC",
-              color: "#3B4A54",
-            }}
-            required
-          >
-            <option value="">Select a category</option>
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+      {/* 🔔 Alert Message */}
+      {message && (
+        <div
+          className={`p-3 mb-4 rounded-lg text-center font-medium`}
+          style={{
+            backgroundColor:
+              message.type === "success"
+                ? "#24D366"
+                : message.type === "error"
+                ? "#ff4d4f"
+                : message.type === "warning"
+                ? "#fff3cd"
+                : "#cfe2ff",
+            color: message.type === "warning" ? "#111B21" : "#ffffff",
+          }}
+        >
+          {message.text}
         </div>
+      )}
 
-        {/* Amount + Date */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <input
-            type="number"
-            name="amount"
-            placeholder="Amount"
-            value={form.amount}
-            onChange={handleChange}
-            className="p-2 rounded-lg border"
-            style={{
-              backgroundColor: "#FFFFFF",
-              borderColor: "#DCDCDC",
-              color: "#3B4A54",
-            }}
-            required
-          />
-          <input
-            type="date"
-            name="date"
-            value={form.date}
-            onChange={handleChange}
-            className="p-2 rounded-lg border"
-            style={{
-              backgroundColor: "#FFFFFF",
-              borderColor: "#DCDCDC",
-              color: "#3B4A54",
-            }}
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          className="w-full mb-4 p-2 rounded-lg border"
+      {/* 🔍 Filter Section */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="p-2 rounded-lg border"
           style={{
             backgroundColor: "#FFFFFF",
             borderColor: "#DCDCDC",
             color: "#3B4A54",
           }}
-        ></textarea>
+        >
+          <option value="">All Categories</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-600 mb-1">
+            Date Range
+          </label>
 
-        {/* Recurring */}
-        <div className="mb-4 flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="isRecurring"
-            checked={form.isRecurring}
-            onChange={handleChange}
-          />
-          <label style={{ color: "#3B4A54" }}>Recurring Expense</label>
+          <div className="flex items-center gap-3">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+            />
+
+            <span className="text-gray-500 font-medium">—</span>
+
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+            />
+          </div>
         </div>
 
-        {form.isRecurring && (
+        <button
+          onClick={fetchFilteredExpenses}
+          className="px-4 py-2 rounded-lg font-semibold"
+          style={{
+            backgroundColor: "#24D366",
+            color: "#FFFFFF",
+          }}
+        >
+          Apply Filters
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 🧾 Expense Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 rounded-2xl shadow"
+          style={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #DCDCDC",
+          }}
+        >
           <div className="mb-4">
             <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
-              Recurrence Interval
+              Category
             </label>
             <select
-              name="recurrenceInterval"
-              value={form.recurrenceInterval}
+              name="category"
+              value={form.category}
               onChange={handleChange}
               className="w-full p-2 rounded-lg border"
               style={{
@@ -587,126 +496,216 @@ return (
                 borderColor: "#DCDCDC",
                 color: "#3B4A54",
               }}
+              required
             >
-              <option value="">Select interval</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
+              <option value="">Select a category</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
             </select>
           </div>
-        )}
 
-        {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="flex-1 py-2 font-semibold rounded-lg"
-            style={{
-              backgroundColor: "#24D366",
-              color: "#FFFFFF",
-            }}
-          >
-            {editingId ? "Save Changes" : "Add Expense"}
-          </button>
-
-          {editingId && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditingId(null);
-                setForm({
-                  amount: "",
-                  date: "",
-                  category: "",
-                  description: "",
-                  isRecurring: false,
-                  recurrenceInterval: "",
-                });
+          {/* Amount + Date */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <input
+              type="number"
+              name="amount"
+              placeholder="Amount"
+              value={form.amount}
+              onChange={handleChange}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
               }}
+              required
+            />
+            <input
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full mb-4 p-2 rounded-lg border"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#DCDCDC",
+              color: "#3B4A54",
+            }}
+          ></textarea>
+
+          {/* Recurring */}
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="isRecurring"
+              checked={form.isRecurring}
+              onChange={handleChange}
+            />
+            <label style={{ color: "#3B4A54" }}>Recurring Expense</label>
+          </div>
+
+          {form.isRecurring && (
+            <div className="mb-4">
+              <label
+                className="block mb-1 text-sm"
+                style={{ color: "#667781" }}
+              >
+                Recurrence Interval
+              </label>
+              <select
+                name="recurrenceInterval"
+                value={form.recurrenceInterval}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg border"
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor: "#DCDCDC",
+                  color: "#3B4A54",
+                }}
+              >
+                <option value="">Select interval</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div className="flex gap-4">
+            <button
+              type="submit"
               className="flex-1 py-2 font-semibold rounded-lg"
               style={{
-                backgroundColor: "#E6E6E6",
-                color: "#111B21",
+                backgroundColor: "#24D366",
+                color: "#FFFFFF",
               }}
             >
-              Cancel
+              {editingId ? "Save Changes" : "Add Expense"}
             </button>
-          )}
-        </div>
-      </form>
 
-      {/* Expense Table */}
-      <div
-        className="p-6 rounded-2xl shadow overflow-x-auto"
-        style={{
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #DCDCDC",
-        }}
-      >
-        <table className="w-full">
-          <thead>
-            <tr style={{ color: "#24D366", borderBottom: "1px solid #E6E6E6" }}>
-              <th className="py-2 text-left">Date</th>
-              <th className="py-2 text-left">Category</th>
-              <th className="py-2 text-left">Description</th>
-              <th className="py-2 text-left">Amount</th>
-              <th className="py-2 text-left">Recurring</th>
-              <th className="py-2 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expenses.length > 0 ? (
-              expenses.map((exp) => (
-                <tr
-                  key={exp._id}
-                  style={{
-                    borderBottom: "1px solid #E6E6E6",
-                  }}
-                  className="hover:bg-[#F5F5F5]"
-                >
-                  <td className="py-2">{exp.date?.slice(0, 10)}</td>
-                  <td className="py-2">{exp.category}</td>
-                  <td className="py-2">{exp.description || "—"}</td>
-                  <td className="py-2 font-semibold" style={{ color: "#24D366" }}>
-                    ₹{exp.amount}
-                  </td>
-                  <td className="py-2">
-                    {exp.isRecurring ? exp.recurrenceInterval : "—"}
-                  </td>
-                  <td className="py-2 text-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(exp)}
-                      className="px-3 py-1 text-sm rounded"
-                      style={{ backgroundColor: "#cfe2ff", color: "#111B21" }}
+            {editingId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingId(null);
+                  setForm({
+                    amount: "",
+                    date: "",
+                    category: "",
+                    description: "",
+                    isRecurring: false,
+                    recurrenceInterval: "",
+                  });
+                }}
+                className="flex-1 py-2 font-semibold rounded-lg"
+                style={{
+                  backgroundColor: "#E6E6E6",
+                  color: "#111B21",
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+
+        {/* Expense Table */}
+        <div
+          className="p-6 rounded-2xl shadow overflow-x-auto"
+          style={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #DCDCDC",
+          }}
+        >
+          <table className="w-full">
+            <thead>
+              <tr
+                style={{ color: "#24D366", borderBottom: "1px solid #E6E6E6" }}
+              >
+                <th className="py-2 text-left">Date</th>
+                <th className="py-2 text-left">Category</th>
+                <th className="py-2 text-left">Description</th>
+                <th className="py-2 text-left">Amount</th>
+                <th className="py-2 text-left">Recurring</th>
+                <th className="py-2 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expenses.length > 0 ? (
+                expenses.map((exp) => (
+                  <tr
+                    key={exp._id}
+                    style={{
+                      borderBottom: "1px solid #E6E6E6",
+                    }}
+                    className="hover:bg-[#F5F5F5]"
+                  >
+                    <td className="py-2">{exp.date?.slice(0, 10)}</td>
+                    <td className="py-2">{exp.category}</td>
+                    <td className="py-2">{exp.description || "—"}</td>
+                    <td
+                      className="py-2 font-semibold"
+                      style={{ color: "#24D366" }}
                     >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(exp._id)}
-                      className="px-3 py-1 text-sm rounded"
-                      style={{ backgroundColor: "#ffdddd", color: "#111B21" }}
-                    >
-                      Delete
-                    </button>
+                      ₹{exp.amount}
+                    </td>
+                    <td className="py-2">
+                      {exp.isRecurring ? exp.recurrenceInterval : "—"}
+                    </td>
+                    <td className="py-2 text-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(exp)}
+                        className="px-3 py-1 text-sm rounded"
+                        style={{ backgroundColor: "#cfe2ff", color: "#111B21" }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(exp._id)}
+                        className="px-3 py-1 text-sm rounded"
+                        style={{ backgroundColor: "#ffdddd", color: "#111B21" }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-4"
+                    style={{ color: "#667781" }}
+                  >
+                    No expenses recorded yet.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="6"
-                  className="text-center py-4"
-                  style={{ color: "#667781" }}
-                >
-                  No expenses recorded yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
