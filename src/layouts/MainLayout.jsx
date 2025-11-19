@@ -9,11 +9,8 @@ export default function MainLayout({ children }) {
   const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   return (
-    <div className="flex bg-[#0B1120] text-gray-100 min-h-screen">
-      {/* ✅ Show Sidebar only when logged in */}
+    <div className="flex min-h-screen">
       {!hideSidebar && <Sidebar />}
-
-      {/* ✅ Page Content Area */}
       <main
         className={`flex-1 px-4 md:px-6 pb-6 min-h-screen overflow-y-auto transition-all duration-300
           ${!hideSidebar ? "md:ml-60 pt-14 md:pt-0" : ""}`}
@@ -23,5 +20,4 @@ export default function MainLayout({ children }) {
     </div>
   );
 }
-
 
