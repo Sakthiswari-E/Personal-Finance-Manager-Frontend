@@ -8,7 +8,7 @@ export default function PublicRoute({ children }) {
 
   if (loadingAuth) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-900 text-gray-400">
+      <div className="flex items-center justify-center h-screen bg-[#F0F2F5] text-[#667781]">
         Checking session...
       </div>
     );
