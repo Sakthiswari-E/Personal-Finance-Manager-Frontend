@@ -24,7 +24,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-900 text-teal-400">
+      <div className="h-screen flex items-center justify-center">
         <div className="text-lg animate-pulse">Loading...</div>
       </div>
     );
