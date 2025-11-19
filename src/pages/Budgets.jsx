@@ -461,24 +461,30 @@ export default function Budgets() {
 //   );
 // }
 
-
-
-
-
-
-
 return (
-  <div className="min-h-screen p-8 bg-[#e6e3e3] text-gray-700">
+  <div
+    className="min-h-screen p-8"
+    style={{ backgroundColor: "#F0F2F5", color: "#3B4A54" }}
+  >
     <div className="max-w-7xl mx-auto">
-      
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-semibold text-[#d88972]">Budgets</h1>
+        <h1
+          className="text-3xl font-bold"
+          style={{ color: "#111B21" }}
+        >
+          Budgets
+        </h1>
 
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="p-2 bg-white border border-gray-300 rounded-lg text-gray-700 shadow-sm"
+          className="p-2 rounded-lg border shadow-sm"
+          style={{
+            backgroundColor: "#FFFFFF",
+            borderColor: "#DCDCDC",
+            color: "#3B4A54",
+          }}
         >
           <option value="">All Categories</option>
           {CATEGORIES.map((cat) => (
@@ -490,28 +496,31 @@ return (
       </div>
 
       {/* Summary */}
-      <div className="bg-white border border-gray-300 rounded-2xl p-6 mb-8 shadow-md">
+      <div
+        className="rounded-2xl p-6 mb-8 shadow"
+        style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
+      >
         <div className="grid md:grid-cols-3 text-center gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#d88972]">
+            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
               Total Budget
             </h2>
-            <p className="text-2xl font-bold text-gray-800">
+            <p className="text-2xl font-bold" style={{ color: "#111B21" }}>
               {formatINR(totalBudget)}
             </p>
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-[#d88972]">
+            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
               Total Spent
             </h2>
-            <p className="text-2xl font-bold text-red-500">
+            <p className="text-2xl font-bold" style={{ color: "#ff4d4f" }}>
               {formatINR(totalSpent)}
             </p>
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-[#d88972]">
+            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
               Remaining
             </h2>
             <p
@@ -526,14 +535,20 @@ return (
       </div>
 
       {/* Pie Chart */}
-      <div className="bg-white border border-gray-300 rounded-2xl p-6 mb-8 shadow-md">
-        <h2 className="text-xl font-semibold text-center text-[#d88972] mb-4">
+      <div
+        className="rounded-2xl p-6 mb-8 shadow"
+        style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
+      >
+        <h2
+          className="text-xl font-semibold text-center mb-4"
+          style={{ color: "#111B21" }}
+        >
           Spending by Category
         </h2>
 
         {filteredBudgets.length === 0 ||
         pieData.every((p) => p.value === 0) ? (
-          <p className="text-center text-gray-500 py-20">
+          <p className="text-center py-20" style={{ color: "#667781" }}>
             No spending data yet.
           </p>
         ) : (
@@ -559,9 +574,9 @@ return (
                 <Tooltip
                   formatter={(v) => `₹${v.toLocaleString()}`}
                   contentStyle={{
-                    backgroundColor: "#ffffff",
-                    border: "1px solid #d3d3d3",
-                    color: "#333",
+                    backgroundColor: "#FFFFFF",
+                    border: "1px solid #DCDCDC",
+                    color: "#111B21",
                   }}
                 />
                 <Legend />
@@ -571,109 +586,114 @@ return (
         )}
       </div>
 
-      {/* Budget Cards */}
-      {loading ? (
-        <p className="text-center text-gray-600">Loading...</p>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Cards Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Add New */}
+        <button
+          onClick={() => {
+            setEditing(null);
+            setForm({ category: "", amount: "", period: "monthly" });
+            setModalOpen(true);
+          }}
+          className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl cursor-pointer"
+          style={{
+            borderColor: "#24D366",
+            backgroundColor: "#FFFFFF",
+          }}
+        >
+          <PlusCircle size={36} className="text-[#24D366] mb-2" />
+          <p style={{ color: "#24D366" }}>Add New Budget</p>
+        </button>
 
-          {/* Add Budget */}
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-[#d88972] rounded-2xl bg-white cursor-pointer hover:bg-[#fbeae4] transition"
-            onClick={() => {
-              setEditing(null);
-              setForm({ category: "", amount: "", period: "monthly" });
-              setModalOpen(true);
-            }}
-          >
-            <PlusCircle size={36} className="text-[#d88972] mb-2" />
-            <p className="text-[#d88972] font-medium">Add New Budget</p>
-          </motion.div>
+        {filteredBudgets.map((b) => {
+          const spent = getSpent(b.category);
+          const percent = Math.min((spent / b.amount) * 100, 100);
+          const over = spent > b.amount;
+          const near = spent >= b.amount * 0.9 && !over;
 
-          {/* Budget Cards */}
-          {filteredBudgets.map((b) => {
-            const spent = getSpent(b.category);
-            const percent = Math.min((spent / b.amount) * 100, 100);
-            const overLimit = spent > b.amount;
-            const nearLimit = spent >= b.amount * 0.9 && !overLimit;
+          return (
+            <div
+              key={b._id}
+              className="p-5 rounded-2xl border shadow"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: over
+                  ? "#ffcccc"
+                  : near
+                  ? "#ffe9a8"
+                  : "#DCDCDC",
+              }}
+            >
+              <div className="flex justify-between mb-3">
+                <h3 className="text-lg font-semibold" style={{ color: "#111B21" }}>
+                  {b.category}
+                </h3>
 
-            return (
-              <motion.div
-                key={b._id}
-                whileHover={{ scale: 1.02 }}
-                className={`p-5 rounded-2xl border shadow-md transition
-                  ${
-                    overLimit
-                      ? "border-red-400 bg-[#ffecec]"
-                      : nearLimit
-                      ? "border-yellow-400 bg-[#fff7e1]"
-                      : "border-gray-300 bg-white"
-                  }`}
-              >
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {b.category}
-                  </h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(b)}
+                    className="px-3 py-1.5 rounded text-sm"
+                    style={{
+                      backgroundColor: "#24D366",
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    Edit
+                  </button>
 
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(b)}
-                      className="flex items-center gap-1 bg-[#d88972] hover:bg-[#c27663] text-white px-3 py-1.5 rounded text-sm transition"
-                    >
-                      <Edit size={14} /> Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(b._id)}
-                      className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm transition"
-                    >
-                      <Trash2 size={14} /> Delete
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleDelete(b._id)}
+                    className="px-3 py-1.5 rounded text-sm"
+                    style={{
+                      backgroundColor: "#ffdddd",
+                      color: "#111B21",
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
+              </div>
 
-                <p className="text-gray-500 text-sm mb-2">
-                  ₹{spent} spent of ₹{b.amount}
+              <p style={{ color: "#667781" }} className="text-sm mb-2">
+                ₹{spent} spent of ₹{b.amount}
+              </p>
+
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div
+                  className="h-3 rounded-full"
+                  style={{
+                    width: `${percent}%`,
+                    backgroundColor: over
+                      ? "#ff4d4f"
+                      : near
+                      ? "#ffcc00"
+                      : "#24D366",
+                  }}
+                ></div>
+              </div>
+
+              {over && (
+                <p className="text-red-600 text-xs">⚠️ Budget exceeded!</p>
+              )}
+
+              {near && !over && (
+                <p className="text-yellow-600 text-xs">
+                  ⚠️ You’re close to your limit.
                 </p>
-
-                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                  <div
-                    className={`h-3 rounded-full transition-all duration-500 ${
-                      overLimit
-                        ? "bg-red-500"
-                        : nearLimit
-                        ? "bg-yellow-500"
-                        : "bg-[#d88972]"
-                    }`}
-                    style={{ width: `${percent}%` }}
-                  ></div>
-                </div>
-
-                {overLimit && (
-                  <p className="text-red-600 text-xs mt-1">
-                    ⚠️ You’ve exceeded your budget!
-                  </p>
-                )}
-                {nearLimit && !overLimit && (
-                  <p className="text-yellow-600 text-xs mt-1">
-                    ⚠️ You’re close to your budget limit.
-                  </p>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
+              )}
+            </div>
+          );
+        })}
+      </div>
 
       {/* Modal */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
             <div
               className="absolute inset-0 bg-black/40"
@@ -685,20 +705,35 @@ return (
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 20, opacity: 0 }}
               onSubmit={handleSubmit}
-              className="relative z-10 bg-white w-full max-w-md p-6 rounded-lg border border-gray-300 shadow-lg"
+              className="relative z-10 w-full max-w-md p-6 rounded-lg shadow-lg"
+              style={{
+                backgroundColor: "#FFFFFF",
+                border: "1px solid #DCDCDC",
+              }}
             >
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              <h3
+                className="text-xl font-semibold mb-4"
+                style={{ color: "#111B21" }}
+              >
                 {editing ? "Edit Budget" : "Add Budget"}
               </h3>
 
-              <div className="grid gap-3">
+              {/* Inputs */}
+              <div className="grid gap-4">
                 <div>
-                  <label className="text-sm text-gray-700">Category</label>
+                  <label className="text-sm" style={{ color: "#667781" }}>
+                    Category
+                  </label>
                   <select
                     name="category"
                     value={form.category}
                     onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded bg-white border border-gray-300 text-gray-800"
+                    className="w-full p-2 mt-1 rounded border"
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#DCDCDC",
+                      color: "#3B4A54",
+                    }}
                   >
                     <option value="">Select Category</option>
                     {CATEGORIES.map((cat) => (
@@ -710,23 +745,37 @@ return (
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-700">Amount (₹)</label>
+                  <label className="text-sm" style={{ color: "#667781" }}>
+                    Amount (₹)
+                  </label>
                   <input
                     name="amount"
                     type="number"
                     value={form.amount}
                     onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded bg-white border border-gray-300 text-gray-800"
+                    className="w-full p-2 mt-1 rounded border"
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#DCDCDC",
+                      color: "#3B4A54",
+                    }}
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-700">Period</label>
+                  <label className="text-sm" style={{ color: "#667781" }}>
+                    Period
+                  </label>
                   <select
                     name="period"
                     value={form.period}
                     onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded bg-white border border-gray-300 text-gray-800"
+                    className="w-full p-2 mt-1 rounded border"
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#DCDCDC",
+                      color: "#3B4A54",
+                    }}
                   >
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
@@ -738,14 +787,23 @@ return (
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800"
+                  className="px-4 py-2 rounded"
+                  style={{
+                    backgroundColor: "#E6E6E6",
+                    color: "#111B21",
+                  }}
                 >
                   Cancel
                 </button>
+
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-[#d88972] hover:bg-[#c27663] rounded text-white"
+                  className="px-4 py-2 rounded"
+                  style={{
+                    backgroundColor: "#24D366",
+                    color: "#FFFFFF",
+                  }}
                 >
                   {submitting ? "Saving..." : editing ? "Update" : "Add"}
                 </button>
