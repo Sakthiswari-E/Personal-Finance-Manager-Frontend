@@ -426,7 +426,7 @@ export default function Expenses() {
             </option>
           ))}
         </select>
-        <div className="border rounded-xl px-4 w-8 bg-white flex items-center gap-6">
+        <div className="border rounded-xl px-4 bg-white flex items-center gap-6">
           {/* FROM */}
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-600">From</span>
@@ -434,7 +434,7 @@ export default function Expenses() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="p-2 rounded-lg border border-gray-300"
+              className="p-1.5 w-32 rounded-lg border border-gray-300"
             />
           </div>
 
