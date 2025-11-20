@@ -52,6 +52,7 @@ export default function Expenses() {
   };
 
   //  Apply filters
+
   const fetchFilteredExpenses = async () => {
     try {
       const params = {};
@@ -59,7 +60,7 @@ export default function Expenses() {
       if (startDate) params.startDate = startDate;
       if (endDate) params.endDate = endDate;
 
-      const res = await api.get("/expenses", { params });
+      const res = await api.get("/expenses/filter", { params });
       setExpenses(res.data);
     } catch (err) {
       console.error("❌ Error filtering expenses:", err);
