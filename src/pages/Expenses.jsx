@@ -426,7 +426,7 @@ export default function Expenses() {
             </option>
           ))}
         </select>
-        <div className="border rounded-xl px-2 bg-white flex items-center gap-6">
+        <div className="border rounded-xl px-4 bg-white flex items-center gap-6">
           {/* FROM */}
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-600">From</span>
