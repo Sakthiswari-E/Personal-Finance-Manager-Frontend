@@ -445,7 +445,7 @@ export default function Expenses() {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="p-2 rounded-lg border border-gray-300"
+              className="p-1.5 w-32 rounded-lg border border-gray-300"
             />
           </div>
         </div>
