@@ -426,26 +426,26 @@ export default function Expenses() {
             </option>
           ))}
         </select>
-        <div className="border rounded-xl p-4 w-fit bg-white flex items-center gap-3">
-          <div className="flex flex-col text-sm">
-            <span className="text-gray-500">From</span>
+        <div className="border rounded-xl p-4 w-fit bg-white flex items-center gap-6">
+          {/* FROM */}
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-gray-600">From</span>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="p-1 rounded border border-gray-300"
+              className="p-2 rounded-lg border border-gray-300"
             />
           </div>
 
-          <span className="text-gray-400 mt-5">→</span>
-
-          <div className="flex flex-col text-sm">
-            <span className="text-gray-500">To</span>
+          {/* TO */}
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-gray-600">To</span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="p-1 rounded border border-gray-300"
+              className="p-2 rounded-lg border border-gray-300"
             />
           </div>
         </div>
