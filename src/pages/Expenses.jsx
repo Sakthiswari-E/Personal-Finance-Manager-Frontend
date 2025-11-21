@@ -462,243 +462,240 @@ export default function Expenses() {
         </button>
       </div>
 
-     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-  {/* ================================
-      LEFT SIDE → EXPENSE FORM
-     ================================ */}
-  <form
-    onSubmit={handleSubmit}
-    className="p-6 rounded-2xl shadow"
-    style={{
-      backgroundColor: "#FFFFFF",
-      border: "1px solid #DCDCDC",
-    }}
-  >
-    <div className="mb-4">
-      <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
-        Category
-      </label>
-      <select
-        name="category"
-        value={form.category}
-        onChange={handleChange}
-        className="w-full p-2 rounded-lg border"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderColor: "#DCDCDC",
-          color: "#3B4A54",
-        }}
-        required
-      >
-        <option value="">Select a category</option>
-        {CATEGORIES.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    {/* Amount + Date */}
-    <div className="grid grid-cols-2 gap-4 mb-4">
-      <input
-        type="number"
-        name="amount"
-        placeholder="Amount"
-        value={form.amount}
-        onChange={handleChange}
-        className="p-2 rounded-lg border"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderColor: "#DCDCDC",
-          color: "#3B4A54",
-        }}
-        required
-      />
-
-      <input
-        type="date"
-        name="date"
-        value={form.date}
-        onChange={handleChange}
-        className="p-2 rounded-lg border"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderColor: "#DCDCDC",
-          color: "#3B4A54",
-        }}
-        required
-      />
-    </div>
-
-    {/* Description */}
-    <textarea
-      name="description"
-      placeholder="Description"
-      value={form.description}
-      onChange={handleChange}
-      className="w-full mb-4 p-2 rounded-lg border"
-      style={{
-        backgroundColor: "#FFFFFF",
-        borderColor: "#DCDCDC",
-        color: "#3B4A54",
-      }}
-    ></textarea>
-
-    {/* Recurring */}
-    <div className="mb-4 flex items-center gap-2">
-      <input
-        type="checkbox"
-        name="isRecurring"
-        checked={form.isRecurring}
-        onChange={handleChange}
-      />
-      <label style={{ color: "#3B4A54" }}>Recurring Expense</label>
-    </div>
-
-    {form.isRecurring && (
-      <div className="mb-4">
-        <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
-          Recurrence Interval
-        </label>
-        <select
-          name="recurrenceInterval"
-          value={form.recurrenceInterval}
-          onChange={handleChange}
-          className="w-full p-2 rounded-lg border"
+      <div className="flex flex-col gap-6">
+        {/* 🧾 Expense Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 rounded-2xl shadow"
           style={{
             backgroundColor: "#FFFFFF",
-            borderColor: "#DCDCDC",
-            color: "#3B4A54",
+            border: "1px solid #DCDCDC",
           }}
-        >
-          <option value="">Select interval</option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-      </div>
-    )}
-
-    {/* Buttons */}
-    <div className="flex gap-4">
-      <button
-        type="submit"
-        className="flex-1 py-2 font-semibold rounded-lg"
-        style={{
-          backgroundColor: "#24D366",
-          color: "#FFFFFF",
-        }}
-      >
-        {editingId ? "Save Changes" : "Add Expense"}
-      </button>
-
-      {editingId && (
-        <button
-          type="button"
-          onClick={() => {
-            setEditingId(null);
-            setForm({
-              amount: "",
-              date: "",
-              category: "",
-              description: "",
-              isRecurring: false,
-              recurrenceInterval: "",
-            });
-          }}
-          className="flex-1 py-2 font-semibold rounded-lg"
-          style={{
-            backgroundColor: "#E6E6E6",
-            color: "#111B21",
-          }}
-        >
-          Cancel
-        </button>
-      )}
-    </div>
-  </form>
-
-  {/* ================================
-      RIGHT SIDE → EXPENSE CARDS
-     ================================ */}
-
-  <div
-    className="p-6 rounded-2xl shadow overflow-y-auto"
-    style={{
-      backgroundColor: "#FFFFFF",
-      border: "1px solid #DCDCDC",
-      maxHeight: "80vh",
-    }}
-  >
-    {expenses.length > 0 ? (
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-        {expenses.map((exp) => (
-          <div
-            key={exp._id}
-            className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
-          >
-            {/* Top row: Date + Amount */}
-            <div className="flex justify-between">
-              <p className="text-sm" style={{ color: "#667781" }}>
-                {new Date(exp.date).toLocaleDateString()}
-              </p>
-
-              <p className="font-semibold" style={{ color: "#24D366" }}>
-                ₹{exp.amount.toLocaleString()}
-              </p>
-            </div>
-
-            {/* Category */}
-            <p className="text-gray-800 font-medium mt-1">{exp.category}</p>
-
-            {/* Description */}
-            <p className="text-sm mt-1" style={{ color: "#3B4A54" }}>
-              {exp.description || "—"}
-            </p>
-
-            {/* Recurring */}
-            <p className="text-xs mt-1" style={{ color: "#8899A6" }}>
-              {exp.isRecurring ? exp.recurrenceInterval : "—"}
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-3">
-              <button
-                onClick={() => handleEdit(exp)}
-                className="px-3 py-1 text-sm rounded-lg"
-                style={{
-                  backgroundColor: "#cfe2ff",
-                  color: "#111B21",
-                }}
-              >
-                Edit
-              </button>
-
-              <button
-                onClick={() => handleDelete(exp._id)}
-                className="px-3 py-1 text-sm rounded-lg"
-                style={{
-                  backgroundColor: "#ffdddd",
-                  color: "#111B21",
-                }}
-              >
-                Delete
-              </button>
-            </div>
+         >
+          <div className="mb-4">
+            <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
+              Category
+            </label>
+            <select
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="w-full p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+              required
+            >
+              <option value="">Select a category</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
-      </div>
-    ) : (
-      <p className="text-center py-4" style={{ color: "#667781" }}>
-        No expenses recorded yet.
-      </p>
-    )}
-  </div>
-</div>
 
+          {/* Amount + Date */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <input
+              type="number"
+              name="amount"
+              placeholder="Amount"
+              value={form.amount}
+              onChange={handleChange}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+              required
+            />
+            <input
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              className="p-2 rounded-lg border"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderColor: "#DCDCDC",
+                color: "#3B4A54",
+              }}
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full mb-4 p-2 rounded-lg border"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#DCDCDC",
+              color: "#3B4A54",
+            }}
+          ></textarea>
+
+          {/* Recurring */}
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="isRecurring"
+              checked={form.isRecurring}
+              onChange={handleChange}
+            />
+            <label style={{ color: "#3B4A54" }}>Recurring Expense</label>
+          </div>
+
+          {form.isRecurring && (
+            <div className="mb-4">
+              <label
+                className="block mb-1 text-sm"
+                style={{ color: "#667781" }}
+              >
+                Recurrence Interval
+              </label>
+              <select
+                name="recurrenceInterval"
+                value={form.recurrenceInterval}
+                onChange={handleChange}
+                className="w-full p-2 rounded-lg border"
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor: "#DCDCDC",
+                  color: "#3B4A54",
+                }}
+              >
+                <option value="">Select interval</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div className="p-6 rounded-2xl shadow overflow-x-auto">
+            <button
+              type="submit"
+              className="flex-1 py-2 font-semibold rounded-lg"
+              style={{
+                backgroundColor: "#24D366",
+                color: "#FFFFFF",
+              }}
+            >
+              {editingId ? "Save Changes" : "Add Expense"}
+            </button>
+
+            {editingId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingId(null);
+                  setForm({
+                    amount: "",
+                    date: "",
+                    category: "",
+                    description: "",
+                    isRecurring: false,
+                    recurrenceInterval: "",
+                  });
+                }}
+                className="flex-1 py-2 font-semibold rounded-lg"
+                style={{
+                  backgroundColor: "#E6E6E6",
+                  color: "#111B21",
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+
+        {/* Expense Table */}
+        <div
+          className="p-6 rounded-2xl shadow overflow-x-auto"
+          style={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #DCDCDC",
+          }}
+         >
+          <table className="w-full">
+            <thead>
+              <tr
+                style={{ color: "#24D366", borderBottom: "1px solid #E6E6E6" }}
+              >
+                <th className="py-2 text-left">Date</th>
+                <th className="py-2 text-left">Category</th>
+                <th className="py-2 text-left">Description</th>
+                <th className="py-2 text-left">Amount</th>
+                <th className="py-2 text-left">Recurring</th>
+                <th className="py-2 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expenses.length > 0 ? (
+                expenses.map((exp) => (
+                  <tr
+                    key={exp._id}
+                    style={{
+                      borderBottom: "1px solid #E6E6E6",
+                    }}
+                    className="hover:bg-[#F5F5F5]"
+                  >
+                    <td className="py-2">{exp.date?.slice(0, 10)}</td>
+                    <td className="py-2">{exp.category}</td>
+                    <td className="py-2">{exp.description || "—"}</td>
+                    <td
+                      className="py-2 font-semibold"
+                      style={{ color: "#24D366" }}
+                    >
+                      ₹{exp.amount}
+                    </td>
+                    <td className="py-2">
+                      {exp.isRecurring ? exp.recurrenceInterval : "—"}
+                    </td>
+                    <td className="py-2 text-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(exp)}
+                        className="px-3 py-1 text-sm rounded"
+                        style={{ backgroundColor: "#cfe2ff", color: "#111B21" }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(exp._id)}
+                        className="px-3 py-1 text-sm rounded"
+                        style={{ backgroundColor: "#ffdddd", color: "#111B21" }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-4"
+                    style={{ color: "#667781" }}
+                  >
+                    No expenses recorded yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
