@@ -52,20 +52,23 @@ export default function Expenses() {
   };
 
   //  Apply filters
-  const fetchFilteredExpenses = async () => {
-    try {
-      const params = {};
-      if (categoryFilter) params.category = categoryFilter;
-      if (startDate) params.startDate = startDate;
-      if (endDate) params.endDate = endDate;
+// Apply filters
+const fetchFilteredExpenses = async () => {
+  try {
+    const body = {
+      category: categoryFilter || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    };
 
-      const res = await api.get("/expenses", { params });
-      setExpenses(res.data);
-    } catch (err) {
-      console.error("❌ Error filtering expenses:", err);
-      showAlert("⚠️ Failed to apply filters.", "error");
-    }
-  };
+    const res = await api.post("/expenses/filter", body);
+    setExpenses(res.data);
+  } catch (err) {
+    console.error("❌ Error filtering expenses:", err);
+    showAlert("⚠️ Failed to apply filters.", "error");
+  }
+};
+
 
   //  Handle input changes
   const handleChange = (e) => {
