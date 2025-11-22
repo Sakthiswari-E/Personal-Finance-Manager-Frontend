@@ -52,23 +52,22 @@ export default function Expenses() {
   };
 
   //  Apply filters
-// Apply filters
-const fetchFilteredExpenses = async () => {
-  try {
-    const body = {
-      category: categoryFilter || undefined,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
-    };
+  // Apply filters
+  const fetchFilteredExpenses = async () => {
+    try {
+      const body = {
+        category: categoryFilter || undefined,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+      };
 
-    const res = await api.post("/expenses/filter", body);
-    setExpenses(res.data);
-  } catch (err) {
-    console.error("❌ Error filtering expenses:", err);
-    showAlert("⚠️ Failed to apply filters.", "error");
-  }
-};
-
+      const res = await api.post("/expenses/filter", body);
+      setExpenses(res.data);
+    } catch (err) {
+      console.error("❌ Error filtering expenses:", err);
+      showAlert("⚠️ Failed to apply filters.", "error");
+    }
+  };
 
   //  Handle input changes
   const handleChange = (e) => {
@@ -243,7 +242,7 @@ const fetchFilteredExpenses = async () => {
             backgroundColor: "#FFFFFF",
             border: "1px solid #DCDCDC",
           }}
-         >
+        >
           <div className="mb-4">
             <label className="block mb-1 text-sm" style={{ color: "#667781" }}>
               Category
@@ -354,7 +353,7 @@ const fetchFilteredExpenses = async () => {
           )}
 
           {/* Buttons */}
-          <div className="p-6 rounded-2xl shadow overflow-x-auto">
+          {/* <div className="p-6 rounded-2xl shadow overflow-x-auto">
             <button
               type="submit"
               className="flex-1 py-2 font-semibold rounded-lg"
@@ -389,6 +388,46 @@ const fetchFilteredExpenses = async () => {
                 Cancel
               </button>
             )}
+          </div> */}
+          <div className="p-6 rounded-2xl shadow">
+            <div className="flex gap-3">
+              {/* Add / Save button */}
+              <button
+                type="submit"
+                className="w-full py-2.5 font-semibold rounded-lg"
+                style={{
+                  backgroundColor: "#24D366",
+                  color: "#FFFFFF",
+                }}
+              >
+                {editingId ? "Save Changes" : "Add Expense"}
+              </button>
+
+              {/* Cancel button */}
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingId(null);
+                    setForm({
+                      amount: "",
+                      date: "",
+                      category: "",
+                      description: "",
+                      isRecurring: false,
+                      recurrenceInterval: "",
+                    });
+                  }}
+                  className="w-full py-2.5 font-semibold rounded-lg"
+                  style={{
+                    backgroundColor: "#E6E6E6",
+                    color: "#111B21",
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
         </form>
 
@@ -399,7 +438,7 @@ const fetchFilteredExpenses = async () => {
             backgroundColor: "#FFFFFF",
             border: "1px solid #DCDCDC",
           }}
-         >
+        >
           <table className="w-full">
             <thead>
               <tr
