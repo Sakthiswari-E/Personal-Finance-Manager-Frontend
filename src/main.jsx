@@ -7,6 +7,7 @@ import "./index.css";
 
 import { AuthProvider } from "./context/AuthContext";
 import { AppProvider } from "./context/AppContext";
+import { NotificationsProvider } from "./context/NotificationsContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
