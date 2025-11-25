@@ -1,3 +1,4 @@
+//frontend\src\components\NotificationsDropdown.jsx
 import { useState, useRef, useEffect } from "react";
 import { useNotifications } from "../context/NotificationsContext";
 import { Bell, CheckCheck } from "lucide-react";

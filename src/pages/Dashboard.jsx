@@ -189,63 +189,7 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-3 relative">
-          {/* 🔔 Notification Bell */}
-          <div className="relative">
-            <button
-              onClick={() => setOpen((prev) => !prev)}
-              className="relative p-2 hover:bg-gray-200 rounded-full transition"
-            >
-              <Bell size={22} className="text-black" />
-
-              {/* 🔴 Unread Badge */}
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-[6px] py-[1px] rounded-full">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            {/* 🔽 Dropdown */}
-            {open && (
-              <div className="absolute right-0 mt-2 w-72 bg-white shadow-xl rounded-lg border border-gray-200 z-50">
-                <div className="p-3 border-b font-medium text-gray-800 flex justify-between items-center">
-                  Notifications
-                  {unreadCount > 0 && (
-                    <button
-                      onClick={markAllAsRead}
-                      className="text-sm text-green-600 hover:underline"
-                    >
-                      Mark all read
-                    </button>
-                  )}
-                </div>
-
-                <div className="max-h-80 overflow-y-auto">
-                  {notifications.length === 0 ? (
-                    <p className="p-4 text-gray-500 text-center">
-                      No notifications
-                    </p>
-                  ) : (
-                    notifications.map((n) => (
-                      <div
-                        key={n._id}
-                        onClick={() => markAsRead(n._id)}
-                        className={`p-3 border-b hover:bg-gray-100 cursor-pointer ${
-                          !n.isRead ? "bg-gray-50" : ""
-                        }`}
-                      >
-                        <p className="font-medium text-gray-900">{n.title}</p>
-                        <p className="text-sm text-gray-600">{n.message}</p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {new Date(n.createdAt).toLocaleString()}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          <NotificationsDropdown />
 
           {/* Refresh Button */}
           <button
