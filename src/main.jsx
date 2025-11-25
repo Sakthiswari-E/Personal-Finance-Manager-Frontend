@@ -13,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
         <AppProvider>
-          <App />
+          <NotificationsProvider>
+            <App />
+          </NotificationsProvider>
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>

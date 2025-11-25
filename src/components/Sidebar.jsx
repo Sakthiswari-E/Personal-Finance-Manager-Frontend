@@ -1,95 +1,196 @@
-// frontend/src/components/Sidebar.jsx
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
-import {
-  Home,
-  BarChart3,
-  Wallet,
-  Settings,
-  ClipboardList,
-  Target,
-  LogOut,
-  Menu,
-  X,
-} from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+// // frontend/src/components/Sidebar.jsx
+// import React, { useState } from "react";
+// import { motion } from "framer-motion";
+// import { Link, useLocation } from "react-router-dom";
+// import {
+//   Home,
+//   BarChart3,
+//   Wallet,
+//   Settings,
+//   ClipboardList,
+//   Target,
+//   LogOut,
+//   Menu,
+//   X,
+// } from "lucide-react";
+// import { useAuth } from "../context/AuthContext";
+// import NotificationsDropdown from "./NotificationsDropdown";
 
-export default function Sidebar() {
-  const { pathname } = useLocation();
-  const { logout } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
+// export default function Sidebar() {
+//   const { pathname } = useLocation();
+//   const { logout } = useAuth();
+//   const [isOpen, setIsOpen] = useState(false);
 
-  const links = [
-    { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
-    { name: "Expenses", icon: <Wallet size={18} />, path: "/expenses" },
-    { name: "Budgets", icon: <ClipboardList size={18} />, path: "/budgets" },
-    { name: "Reports", icon: <BarChart3 size={18} />, path: "/reports" },
-    { name: "Goals", icon: <Target size={18} />, path: "/goals" },
-    { name: "Settings", icon: <Settings size={18} />, path: "/settings" },
-  ];
+//   const links = [
+//     { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
+//     { name: "Expenses", icon: <Wallet size={18} />, path: "/expenses" },
+//     { name: "Budgets", icon: <ClipboardList size={18} />, path: "/budgets" },
+//     { name: "Reports", icon: <BarChart3 size={18} />, path: "/reports" },
+//     { name: "Goals", icon: <Target size={18} />, path: "/goals" },
+//     { name: "Settings", icon: <Settings size={18} />, path: "/settings" },
+//   ];
+
+// //   return (
+// //     <>
+// //       {/* ✅ MOBILE TOP NAV */}
+// //       <div className="md:hidden fixed top-0 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 z-50 flex items-center justify-between px-4 py-3">
+// //         <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
+// //         <button
+// //           className="text-gray-300"
+// //           onClick={() => setIsOpen((prev) => !prev)}
+// //         >
+// //           {isOpen ? <X size={26} /> : <Menu size={26} />}
+// //         </button>
+// //       </div>
+
+// //       {/* ✅ MOBILE SLIDE DOWN MENU */}
+// //       {isOpen && (
+// //         <motion.div
+// //           initial={{ height: 0 }}
+// //           animate={{ height: "auto" }}
+// //           transition={{ duration: 0.3 }}
+// //           className="md:hidden fixed top-14 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 shadow-lg z-40 flex flex-col"
+// //         >
+// //           {links.map((item) => (
+// //             <Link
+// //               key={item.path}
+// //               to={item.path}
+// //               onClick={() => setIsOpen(false)}
+// //               className={`flex items-center gap-3 px-6 py-3 transition ${
+// //                 pathname === item.path
+// //                   ? "bg-teal-500/20 text-teal-400"
+// //                   : "text-gray-300 hover:bg-gray-800 hover:text-white"
+// //               }`}
+// //             >
+// //               {item.icon}
+// //               {item.name}
+// //             </Link>
+// //           ))}
+// //           <button
+// //             onClick={logout}
+// //             className="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
+// //           >
+// //             <LogOut size={18} /> Logout
+// //           </button>
+// //         </motion.div>
+// //       )}
+
+// //       {/* ✅ DESKTOP SIDEBAR */}
+// //       <aside className="hidden md:flex flex-col w-60 bg-[#0a0a0a] border-r border-gray-800 h-screen py-6 sticky top-0">
+// //         <h2 className="text-2xl text-teal-400 font-semibold px-6 mb-8">
+// //           PFM
+// //         </h2>
+
+// //         <nav className="flex flex-col gap-2 px-4">
+// //           {links.map((item) => (
+// //             <Link
+// //               key={item.path}
+// //               to={item.path}
+// //               className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+// //                 pathname === item.path
+// //                   ? "bg-teal-500/20 text-teal-400"
+// //                   : "text-gray-300 hover:bg-teal-500/10 hover:text-white"
+// //               }`}
+// //             >
+// //               {item.icon}
+// //               {item.name}
+// //             </Link>
+// //           ))}
+// //         </nav>
+
+// //         <button
+// //           onClick={logout}
+// //           className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition px-6 py-3 rounded-lg mt-auto mx-4"
+// //         >
+// //           <LogOut size={18} /> Logout
+// //         </button>
+// //       </aside>
+// //     </>
+// //   );
+// // }
+
+
+
+
+
+
+
 
 //   return (
 //     <>
-//       {/* ✅ MOBILE TOP NAV */}
-//       <div className="md:hidden fixed top-0 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 z-50 flex items-center justify-between px-4 py-3">
-//         <h2 className="text-xl text-teal-400 font-semibold">PFM</h2>
+//       {/* 📱 MOBILE TOP NAV (WhatsApp Style) */}
+//       <div className="md:hidden fixed top-0 left-0 right-0 
+//         bg-[#FFFFFF] border-b border-[#E6E6E6] z-50 
+//         flex items-center justify-between px-4 py-3">
+//         <h2 className="text-xl text-[#111B21] font-semibold">PFM</h2>
+
 //         <button
-//           className="text-gray-300"
+//           className="text-[#3B4A54]"
 //           onClick={() => setIsOpen((prev) => !prev)}
 //         >
 //           {isOpen ? <X size={26} /> : <Menu size={26} />}
 //         </button>
 //       </div>
 
-//       {/* ✅ MOBILE SLIDE DOWN MENU */}
+//       {/* 📱 MOBILE SLIDE MENU */}
 //       {isOpen && (
 //         <motion.div
 //           initial={{ height: 0 }}
 //           animate={{ height: "auto" }}
 //           transition={{ duration: 0.3 }}
-//           className="md:hidden fixed top-14 left-0 right-0 bg-[#0a0a0a] border-b border-gray-800 shadow-lg z-40 flex flex-col"
+//           className="md:hidden fixed top-14 left-0 right-0 
+//             bg-[#FFFFFF] border-b border-[#E6E6E6] shadow 
+//             z-40 flex flex-col"
 //         >
 //           {links.map((item) => (
 //             <Link
 //               key={item.path}
 //               to={item.path}
 //               onClick={() => setIsOpen(false)}
-//               className={`flex items-center gap-3 px-6 py-3 transition ${
-//                 pathname === item.path
-//                   ? "bg-teal-500/20 text-teal-400"
-//                   : "text-gray-300 hover:bg-gray-800 hover:text-white"
-//               }`}
+//               className={`flex items-center gap-3 px-6 py-3 transition rounded-lg
+//                 ${
+//                   pathname === item.path
+//                     ? "bg-[#E8F5E9] text-[#111B21]"
+//                     : "text-[#3B4A54] hover:bg-[#F5F5F5]"
+//                 }`}
 //             >
 //               {item.icon}
 //               {item.name}
 //             </Link>
 //           ))}
+
 //           <button
 //             onClick={logout}
-//             className="flex items-center gap-3 px-6 py-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition"
+//             className="flex items-center gap-3 px-6 py-3
+//               text-[#667781] hover:text-[#24D366] hover:bg-[#F5F5F5] transition"
 //           >
 //             <LogOut size={18} /> Logout
 //           </button>
 //         </motion.div>
 //       )}
 
-//       {/* ✅ DESKTOP SIDEBAR */}
-//       <aside className="hidden md:flex flex-col w-60 bg-[#0a0a0a] border-r border-gray-800 h-screen py-6 sticky top-0">
-//         <h2 className="text-2xl text-teal-400 font-semibold px-6 mb-8">
+//       {/* 💻 DESKTOP SIDEBAR */}
+//       <aside
+//         className="hidden md:flex flex-col w-60 
+//         bg-[#FFFFFF] border-r border-[#E6E6E6] 
+//         h-screen py-6 sticky top-0"
+//       >
+//         <h2 className="text-2xl text-[#111B21] font-semibold px-6 mb-8">
 //           PFM
 //         </h2>
 
-//         <nav className="flex flex-col gap-2 px-4">
+//         {/* NAV LINKS */}
+//         <nav className="flex flex-col gap-1 px-3">
 //           {links.map((item) => (
 //             <Link
 //               key={item.path}
 //               to={item.path}
-//               className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-//                 pathname === item.path
-//                   ? "bg-teal-500/20 text-teal-400"
-//                   : "text-gray-300 hover:bg-teal-500/10 hover:text-white"
-//               }`}
+//               className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition
+//                 ${
+//                   pathname === item.path
+//                     ? "bg-[#E8F5E9] text-[#111B21] border border-[#DCDCDC]"
+//                     : "text-[#3B4A54] hover:bg-[#F5F5F5]"
+//                 }`}
 //             >
 //               {item.icon}
 //               {item.name}
@@ -97,9 +198,12 @@ export default function Sidebar() {
 //           ))}
 //         </nav>
 
+//         {/* LOGOUT */}
 //         <button
 //           onClick={logout}
-//           className="flex items-center gap-3 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition px-6 py-3 rounded-lg mt-auto mx-4"
+//           className="flex items-center gap-3 text-[#667781] 
+//             hover:text-[#24D366] hover:bg-[#F5F5F5] 
+//             transition px-6 py-3 rounded-lg mt-auto mx-4"
 //         >
 //           <LogOut size={18} /> Logout
 //         </button>
@@ -115,20 +219,88 @@ export default function Sidebar() {
 
 
 
+
+
+
+
+
+
+
+
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
+import NotificationsDropdown from "./NotificationsDropdown";
+import { Bell } from "lucide-react";
+import { useNotifications } from "../context/NotificationsContext";
+
+import {
+  Home,
+  BarChart3,
+  Wallet,
+  Settings,
+  ClipboardList,
+  Target,
+  LogOut,
+  Menu,
+  X,
+  Bell,
+} from "lucide-react";
+
+import { useAuth } from "../context/AuthContext";
+import NotificationsDropdown from "./NotificationsDropdown";
+import { useNotifications } from "../context/NotificationsContext";
+
+export default function Sidebar() {
+  const { pathname } = useLocation();
+  const { logout } = useAuth();
+  const { unreadCount } = useNotifications();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const links = [
+    { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
+    { name: "Expenses", icon: <Wallet size={18} />, path: "/expenses" },
+    { name: "Budgets", icon: <ClipboardList size={18} />, path: "/budgets" },
+    { name: "Reports", icon: <BarChart3 size={18} />, path: "/reports" },
+    { name: "Goals", icon: <Target size={18} />, path: "/goals" },
+    { name: "Settings", icon: <Settings size={18} />, path: "/settings" },
+  ];
+
   return (
     <>
-      {/* 📱 MOBILE TOP NAV (WhatsApp Style) */}
+      {/* 📱 MOBILE TOP NAV */}
       <div className="md:hidden fixed top-0 left-0 right-0 
         bg-[#FFFFFF] border-b border-[#E6E6E6] z-50 
         flex items-center justify-between px-4 py-3">
+
         <h2 className="text-xl text-[#111B21] font-semibold">PFM</h2>
 
-        <button
-          className="text-[#3B4A54]"
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
-          {isOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
+        {/* 🔔 NOTIFICATION + MENU */}
+        <div className="flex items-center gap-4">
+          {/* Styled Bell Button */}
+          <div className="relative">
+            <NotificationsDropdown>
+              <button className="relative p-1 rounded-full hover:bg-[#F5F5F5] transition">
+                <Bell size={22} className="text-[#111B21]" />
+
+                {/* unread badge */}
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#25D366] text-white 
+                    text-xs px-[6px] py-[1px] rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            </NotificationsDropdown>
+          </div>
+
+          <button
+            className="text-[#3B4A54]"
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
+            {isOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
       </div>
 
       {/* 📱 MOBILE SLIDE MENU */}
@@ -174,9 +346,26 @@ export default function Sidebar() {
         bg-[#FFFFFF] border-r border-[#E6E6E6] 
         h-screen py-6 sticky top-0"
       >
-        <h2 className="text-2xl text-[#111B21] font-semibold px-6 mb-8">
+        <h2 className="text-2xl text-[#111B21] font-semibold px-6 mb-4">
           PFM
         </h2>
+
+        {/* 🔔 Bell in Sidebar */}
+        <div className="px-6 mb-6">
+          <NotificationsDropdown>
+            <button className="relative p-2 rounded-lg hover:bg-[#F5F5F5] transition w-full text-left flex items-center gap-3">
+              <Bell size={20} className="text-[#111B21]" />
+              <span className="text-[#111B21] text-sm">Notifications</span>
+
+              {unreadCount > 0 && (
+                <span className="absolute right-2 bg-[#25D366] text-white 
+                  text-xs px-[7px] py-[1px] rounded-full">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+          </NotificationsDropdown>
+        </div>
 
         {/* NAV LINKS */}
         <nav className="flex flex-col gap-1 px-3">
