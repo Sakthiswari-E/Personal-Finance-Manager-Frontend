@@ -17,8 +17,7 @@ import {
 } from "chart.js";
 import { Line, Pie } from "react-chartjs-2";
 import { Target, Wallet, BarChart3, LogOut } from "lucide-react";
-import { Bell } from "lucide-react";
-import { useNotifications } from "../context/NotificationsContext";
+import NotificationsDropdown from "../components/NotificationsDropdown";
 
 ChartJS.register(
   CategoryScale,
