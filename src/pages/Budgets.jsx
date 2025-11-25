@@ -87,10 +87,10 @@ export default function Budgets() {
       setSubmitting(true);
       if (editing) {
         await api.put(`/budgets/${editing._id}`, normalizedForm);
-        toast.success("✅ Budget updated!");
+        toast.success(" Budget updated!");
       } else {
         await api.post("/budgets", normalizedForm);
-        toast.success("✅ Budget added!");
+        toast.success(" Budget added!");
       }
 
       setModalOpen(false);
