@@ -230,9 +230,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import NotificationsDropdown from "./NotificationsDropdown";
-import { Bell } from "lucide-react";
-import { useNotifications } from "../context/NotificationsContext";
 
 import {
   Home,
