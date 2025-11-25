@@ -98,7 +98,7 @@ export default function Budgets() {
       fetchData();
     } catch (err) {
       console.error(err);
-      toast.error("❌ Failed to save budget.");
+      toast.error(" Failed to save budget.");
     } finally {
       setSubmitting(false);
     }
@@ -121,7 +121,7 @@ export default function Budgets() {
       toast("🗑️ Budget deleted.", { icon: "🗑️" });
       fetchData();
     } catch {
-      toast.error("❌ Failed to delete budget.");
+      toast.error(" Failed to delete budget.");
     }
   };
 

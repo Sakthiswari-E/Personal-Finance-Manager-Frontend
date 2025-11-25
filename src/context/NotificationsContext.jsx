@@ -1,5 +1,6 @@
+// frontend/src/context/NotificationsContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api"; // ✅ Use your axios instance with token
 
 const NotificationsContext = createContext();
 
@@ -8,17 +9,14 @@ export const NotificationsProvider = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // ---- Fetch Notifications from API ---- //
+  // ---- Fetch Notifications ---- //
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("/api/notifications"); 
+      const res = await api.get("/notifications"); // ✅ FIXED
       const data = res.data || [];
 
       setNotifications(data);
-
-      // count unread notifications
-      const unread = data.filter((n) => !n.isRead).length;
-      setUnreadCount(unread);
+      setUnreadCount(data.filter((n) => !n.isRead).length);
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
@@ -29,14 +27,12 @@ export const NotificationsProvider = ({ children }) => {
   // ---- Mark One Notification Read ---- //
   const markAsRead = async (id) => {
     try {
-      await axios.patch(`/api/notifications/${id}`, { isRead: true });
+      await api.patch(`/notifications/${id}`, { isRead: true }); // ✅ FIXED
 
-      // update local state instantly
       setNotifications((prev) =>
         prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
       );
 
-      // recalc unread count
       setUnreadCount((prev) => Math.max(prev - 1, 0));
     } catch (error) {
       console.error("Mark as read failed:", error);
@@ -46,19 +42,16 @@ export const NotificationsProvider = ({ children }) => {
   // ---- Mark ALL Notifications Read ---- //
   const markAllAsRead = async () => {
     try {
-      await axios.patch("/api/notifications/mark-all");
+      await api.patch("/notifications/mark-all"); // ✅ FIXED
 
-      // update local
-      setNotifications((prev) =>
-        prev.map((n) => ({ ...n, isRead: true }))
-      );
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
       setUnreadCount(0);
     } catch (error) {
       console.error("Failed to mark all as read:", error);
     }
   };
 
-  // ---- Auto Refresh Notifications (20 sec) ---- //
+  // ---- Auto Refresh ---- //
   useEffect(() => {
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 20000);
@@ -81,5 +74,4 @@ export const NotificationsProvider = ({ children }) => {
   );
 };
 
-// custom hook
 export const useNotifications = () => useContext(NotificationsContext);
