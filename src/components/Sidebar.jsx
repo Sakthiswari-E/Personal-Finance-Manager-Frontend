@@ -28,6 +28,7 @@ export default function Sidebar() {
     { name: "Goals", icon: <Target size={18} />, path: "/goals" },
     { name: "Settings", icon: <Settings size={18} />, path: "/settings" },
   ];
+
   return (
     <>
       {/* 📱 MOBILE TOP NAV  */}
