@@ -181,358 +181,364 @@ export default function Budgets() {
     value: getSpent(b.category),
   }));
 
-return (
-  <div
-    className="min-h-screen p-8"
-    style={{ backgroundColor: "#F0F2F5", color: "#3B4A54" }}
-  >
-    <div className="max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1
-          className="text-3xl font-bold"
-          style={{ color: "#111B21" }}
+  return (
+    <div
+      className="min-h-screen p-8"
+      style={{ backgroundColor: "#F0F2F5", color: "#3B4A54" }}
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold" style={{ color: "#111B21" }}>
+            Budgets
+          </h1>
+
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="p-2 rounded-lg border shadow-sm"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderColor: "#DCDCDC",
+              color: "#3B4A54",
+            }}
+          >
+            <option value="">All Categories</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Summary */}
+        <div
+          className="rounded-2xl p-6 mb-8 shadow"
+          style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
         >
-          Budgets
-        </h1>
+          <div className="grid md:grid-cols-3 text-center gap-4">
+            <div>
+              <h2
+                className="text-lg font-semibold"
+                style={{ color: "#111B21" }}
+              >
+                Total Budget
+              </h2>
+              <p className="text-2xl font-bold" style={{ color: "#111B21" }}>
+                {formatINR(totalBudget)}
+              </p>
+            </div>
 
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="p-2 rounded-lg border shadow-sm"
-          style={{
-            backgroundColor: "#FFFFFF",
-            borderColor: "#DCDCDC",
-            color: "#3B4A54",
-          }}
-        >
-          <option value="">All Categories</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+            <div>
+              <h2
+                className="text-lg font-semibold"
+                style={{ color: "#111B21" }}
+              >
+                Total Spent
+              </h2>
+              <p className="text-2xl font-bold" style={{ color: "#ff4d4f" }}>
+                {formatINR(totalSpent)}
+              </p>
+            </div>
 
-      {/* Summary */}
-      <div
-        className="rounded-2xl p-6 mb-8 shadow"
-        style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
-      >
-        <div className="grid md:grid-cols-3 text-center gap-4">
-          <div>
-            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
-              Total Budget
-            </h2>
-            <p className="text-2xl font-bold" style={{ color: "#111B21" }}>
-              {formatINR(totalBudget)}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
-              Total Spent
-            </h2>
-            <p className="text-2xl font-bold" style={{ color: "#ff4d4f" }}>
-              {formatINR(totalSpent)}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold" style={{ color: "#111B21" }}>
-              Remaining
-            </h2>
-            <p
-              className={`text-2xl font-bold ${
-                remaining < 0 ? "text-red-500" : "text-green-600"
-              }`}
-            >
-              {formatINR(remaining)}
-            </p>
+            <div>
+              <h2
+                className="text-lg font-semibold"
+                style={{ color: "#111B21" }}
+              >
+                Remaining
+              </h2>
+              <p
+                className={`text-2xl font-bold ${
+                  remaining < 0 ? "text-red-500" : "text-green-600"
+                }`}
+              >
+                {formatINR(remaining)}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Pie Chart */}
-      <div
-        className="rounded-2xl p-6 mb-8 shadow"
-        style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
-      >
-        <h2
-          className="text-xl font-semibold text-center mb-4"
-          style={{ color: "#111B21" }}
+        {/* Pie Chart */}
+        <div
+          className="rounded-2xl p-6 mb-8 shadow"
+          style={{ backgroundColor: "#FFFFFF", border: "1px solid #DCDCDC" }}
         >
-          Spending by Category
-        </h2>
+          <h2
+            className="text-xl font-semibold text-center mb-4"
+            style={{ color: "#111B21" }}
+          >
+            Spending by Category
+          </h2>
 
-        {filteredBudgets.length === 0 ||
-        pieData.every((p) => p.value === 0) ? (
-          <p className="text-center py-20" style={{ color: "#667781" }}>
-            No spending data yet.
-          </p>
-        ) : (
-          <div className="flex justify-center items-center h-72">
-            <ResponsiveContainer width="60%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="name"
-                  outerRadius={120}
-                  innerRadius={70}
-                  paddingAngle={4}
-                  label={({ name, value }) => `${name}: ₹${value}`}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell
-                      key={index}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(v) => `₹${v.toLocaleString()}`}
-                  contentStyle={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #DCDCDC",
-                    color: "#111B21",
-                  }}
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </div>
+          {filteredBudgets.length === 0 ||
+          pieData.every((p) => p.value === 0) ? (
+            <p className="text-center py-20" style={{ color: "#667781" }}>
+              No spending data yet.
+            </p>
+          ) : (
+            <div className="flex justify-center items-center h-72">
+              <ResponsiveContainer width="60%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={120}
+                    innerRadius={70}
+                    paddingAngle={4}
+                    label={({ name, value }) => `${name}: ₹${value}`}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(v) => `₹${v.toLocaleString()}`}
+                    contentStyle={{
+                      backgroundColor: "#FFFFFF",
+                      border: "1px solid #DCDCDC",
+                      color: "#111B21",
+                    }}
+                  />
+                  <Legend
+                    wrapperStyle={{
+                      marginTop: "20px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </div>
 
-      {/* Cards Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Add New */}
-        <button
-          onClick={() => {
-            setEditing(null);
-            setForm({ category: "", amount: "", period: "monthly" });
-            setModalOpen(true);
-          }}
-          className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl cursor-pointer"
-          style={{
-            borderColor: "#24D366",
-            backgroundColor: "#FFFFFF",
-          }}
-        >
-          <PlusCircle size={36} className="text-[#24D366] mb-2" />
-          <p style={{ color: "#24D366" }}>Add New Budget</p>
-        </button>
+        {/* Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Add New */}
+          <button
+            onClick={() => {
+              setEditing(null);
+              setForm({ category: "", amount: "", period: "monthly" });
+              setModalOpen(true);
+            }}
+            className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl cursor-pointer"
+            style={{
+              borderColor: "#24D366",
+              backgroundColor: "#FFFFFF",
+            }}
+          >
+            <PlusCircle size={36} className="text-[#24D366] mb-2" />
+            <p style={{ color: "#24D366" }}>Add New Budget</p>
+          </button>
 
-        {filteredBudgets.map((b) => {
-          const spent = getSpent(b.category);
-          const percent = Math.min((spent / b.amount) * 100, 100);
-          const over = spent > b.amount;
-          const near = spent >= b.amount * 0.9 && !over;
+          {filteredBudgets.map((b) => {
+            const spent = getSpent(b.category);
+            const percent = Math.min((spent / b.amount) * 100, 100);
+            const over = spent > b.amount;
+            const near = spent >= b.amount * 0.9 && !over;
 
-          return (
-            <div
-              key={b._id}
-              className="p-5 rounded-2xl border shadow"
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderColor: over
-                  ? "#ffcccc"
-                  : near
-                  ? "#ffe9a8"
-                  : "#DCDCDC",
-              }}
+            return (
+              <div
+                key={b._id}
+                className="p-5 rounded-2xl border shadow"
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor: over ? "#ffcccc" : near ? "#ffe9a8" : "#DCDCDC",
+                }}
+              >
+                <div className="flex justify-between mb-3">
+                  <h3
+                    className="text-lg font-semibold"
+                    style={{ color: "#111B21" }}
+                  >
+                    {b.category}
+                  </h3>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(b)}
+                      className="px-3 py-1.5 rounded text-sm"
+                      style={{
+                        backgroundColor: "#24D366",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(b._id)}
+                      className="px-3 py-1.5 rounded text-sm"
+                      style={{
+                        backgroundColor: "#ffdddd",
+                        color: "#111B21",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                <p style={{ color: "#667781" }} className="text-sm mb-2">
+                  ₹{spent} spent of ₹{b.amount}
+                </p>
+
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                  <div
+                    className="h-3 rounded-full"
+                    style={{
+                      width: `${percent}%`,
+                      backgroundColor: over
+                        ? "#ff4d4f"
+                        : near
+                        ? "#ffcc00"
+                        : "#24D366",
+                    }}
+                  ></div>
+                </div>
+
+                {over && (
+                  <p className="text-red-600 text-xs">⚠️ Budget exceeded!</p>
+                )}
+
+                {near && !over && (
+                  <p className="text-yellow-600 text-xs">
+                    ⚠️ You’re close to your limit.
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {modalOpen && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="flex justify-between mb-3">
-                <h3 className="text-lg font-semibold" style={{ color: "#111B21" }}>
-                  {b.category}
+              <div
+                className="absolute inset-0 bg-black/40"
+                onClick={() => setModalOpen(false)}
+              />
+
+              <motion.form
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 20, opacity: 0 }}
+                onSubmit={handleSubmit}
+                className="relative z-10 w-full max-w-md p-6 rounded-lg shadow-lg"
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid #DCDCDC",
+                }}
+              >
+                <h3
+                  className="text-xl font-semibold mb-4"
+                  style={{ color: "#111B21" }}
+                >
+                  {editing ? "Edit Budget" : "Add Budget"}
                 </h3>
 
-                <div className="flex gap-2">
+                {/* Inputs */}
+                <div className="grid gap-4">
+                  <div>
+                    <label className="text-sm" style={{ color: "#667781" }}>
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      value={form.category}
+                      onChange={handleChange}
+                      className="w-full p-2 mt-1 rounded border"
+                      style={{
+                        backgroundColor: "#FFFFFF",
+                        borderColor: "#DCDCDC",
+                        color: "#3B4A54",
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {CATEGORIES.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm" style={{ color: "#667781" }}>
+                      Amount (₹)
+                    </label>
+                    <input
+                      name="amount"
+                      type="number"
+                      value={form.amount}
+                      onChange={handleChange}
+                      className="w-full p-2 mt-1 rounded border"
+                      style={{
+                        backgroundColor: "#FFFFFF",
+                        borderColor: "#DCDCDC",
+                        color: "#3B4A54",
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm" style={{ color: "#667781" }}>
+                      Period
+                    </label>
+                    <select
+                      name="period"
+                      value={form.period}
+                      onChange={handleChange}
+                      className="w-full p-2 mt-1 rounded border"
+                      style={{
+                        backgroundColor: "#FFFFFF",
+                        borderColor: "#DCDCDC",
+                        color: "#3B4A54",
+                      }}
+                    >
+                      <option value="monthly">Monthly</option>
+                      <option value="yearly">Yearly</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-6 gap-3">
                   <button
-                    onClick={() => handleEdit(b)}
-                    className="px-3 py-1.5 rounded text-sm"
+                    type="button"
+                    onClick={() => setModalOpen(false)}
+                    className="px-4 py-2 rounded"
+                    style={{
+                      backgroundColor: "#E6E6E6",
+                      color: "#111B21",
+                    }}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="px-4 py-2 rounded"
                     style={{
                       backgroundColor: "#24D366",
                       color: "#FFFFFF",
                     }}
                   >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(b._id)}
-                    className="px-3 py-1.5 rounded text-sm"
-                    style={{
-                      backgroundColor: "#ffdddd",
-                      color: "#111B21",
-                    }}
-                  >
-                    Delete
+                    {submitting ? "Saving..." : editing ? "Update" : "Add"}
                   </button>
                 </div>
-              </div>
-
-              <p style={{ color: "#667781" }} className="text-sm mb-2">
-                ₹{spent} spent of ₹{b.amount}
-              </p>
-
-              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                <div
-                  className="h-3 rounded-full"
-                  style={{
-                    width: `${percent}%`,
-                    backgroundColor: over
-                      ? "#ff4d4f"
-                      : near
-                      ? "#ffcc00"
-                      : "#24D366",
-                  }}
-                ></div>
-              </div>
-
-              {over && (
-                <p className="text-red-600 text-xs">⚠️ Budget exceeded!</p>
-              )}
-
-              {near && !over && (
-                <p className="text-yellow-600 text-xs">
-                  ⚠️ You’re close to your limit.
-                </p>
-              )}
-            </div>
-          );
-        })}
+              </motion.form>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Modal */}
-      <AnimatePresence>
-        {modalOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div
-              className="absolute inset-0 bg-black/40"
-              onClick={() => setModalOpen(false)}
-            />
-
-            <motion.form
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              onSubmit={handleSubmit}
-              className="relative z-10 w-full max-w-md p-6 rounded-lg shadow-lg"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #DCDCDC",
-              }}
-            >
-              <h3
-                className="text-xl font-semibold mb-4"
-                style={{ color: "#111B21" }}
-              >
-                {editing ? "Edit Budget" : "Add Budget"}
-              </h3>
-
-              {/* Inputs */}
-              <div className="grid gap-4">
-                <div>
-                  <label className="text-sm" style={{ color: "#667781" }}>
-                    Category
-                  </label>
-                  <select
-                    name="category"
-                    value={form.category}
-                    onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded border"
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      borderColor: "#DCDCDC",
-                      color: "#3B4A54",
-                    }}
-                  >
-                    <option value="">Select Category</option>
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-sm" style={{ color: "#667781" }}>
-                    Amount (₹)
-                  </label>
-                  <input
-                    name="amount"
-                    type="number"
-                    value={form.amount}
-                    onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded border"
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      borderColor: "#DCDCDC",
-                      color: "#3B4A54",
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm" style={{ color: "#667781" }}>
-                    Period
-                  </label>
-                  <select
-                    name="period"
-                    value={form.period}
-                    onChange={handleChange}
-                    className="w-full p-2 mt-1 rounded border"
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      borderColor: "#DCDCDC",
-                      color: "#3B4A54",
-                    }}
-                  >
-                    <option value="monthly">Monthly</option>
-                    <option value="yearly">Yearly</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded"
-                  style={{
-                    backgroundColor: "#E6E6E6",
-                    color: "#111B21",
-                  }}
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-4 py-2 rounded"
-                  style={{
-                    backgroundColor: "#24D366",
-                    color: "#FFFFFF",
-                  }}
-                >
-                  {submitting ? "Saving..." : editing ? "Update" : "Add"}
-                </button>
-              </div>
-            </motion.form>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
-  </div>
-);
+  );
 }
