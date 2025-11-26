@@ -10,9 +10,10 @@ export default function MainLayout({ children }) {
 
   return (
     <div className="flex min-h-screen w-full bg-[#F0F2F5]">
+      
       {/* Sidebar */}
       {!hideSidebar && (
-        <div className="hidden md:block w-60 bg-white border-r border-gray-200">
+        <div className="w-60 bg-white border-r border-gray-200">
           <Sidebar />
         </div>
       )}
