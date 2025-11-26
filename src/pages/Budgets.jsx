@@ -304,7 +304,7 @@ export default function Budgets() {
                   />
                   <Legend
                     wrapperStyle={{
-                      marginTop: "20px",
+                      marginTop: "40px",
                     }}
                   />
                 </PieChart>
