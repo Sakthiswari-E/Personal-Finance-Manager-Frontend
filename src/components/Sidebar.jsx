@@ -181,7 +181,7 @@ export default function Sidebar() {
       </div>
 
       {/* 📱 MOBILE SLIDE MENU */}
-      {/* {isOpen && (
+      {isOpen && (
         <motion.div
           initial={{ height: 0 }}
           animate={{ height: "auto" }}
@@ -207,7 +207,7 @@ export default function Sidebar() {
             </Link>
           ))}
 
-        
+          {/* MOBILE LOGOUT */}
           <button
             onClick={logout}
             className="flex items-center gap-3 px-6 py-3
@@ -216,14 +216,14 @@ export default function Sidebar() {
             <LogOut size={18} /> Logout
           </button>
         </motion.div>
-      )} */}
+      )}
 
       {/* 💻 DESKTOP SIDEBAR */}
       <aside
         className="hidden md:flex flex-col w-60 
         bg-[#FFFFFF] border-r border-[#E6E6E6] 
         h-screen py-6 sticky top-0"
-      >
+       >
         <h2 className="text-2xl text-[#111B21] font-semibold px-6 mb-8">
           PFM
         </h2>
