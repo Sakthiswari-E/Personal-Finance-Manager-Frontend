@@ -133,7 +133,7 @@
 
 
 
-frontend/src/components/Sidebar.jsx
+//frontend/src/components/Sidebar.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
