@@ -132,13 +132,34 @@ export default function Dashboard() {
   }, []);
 
   // Chart configs
+  // const lineData = {
+  //   labels: trend.map((t) =>
+  //     new Date(t.date).toLocaleDateString("en-GB", {
+  //       day: "2-digit",
+  //       month: "short",
+  //     })
+  //   ),
+  //   datasets: [
+  //     {
+  //       label: "Expenses (₹)",
+  //       data: trend.map((t) => t.total || 0),
+  //       borderColor: "#14b8a6",
+  //       backgroundColor: "rgba(20,184,166,0.15)",
+  //       tension: 0.4,
+  //       fill: true,
+  //     },
+  //   ],
+  // };
   const lineData = {
-    labels: trend.map((t) =>
-      new Date(t.date).toLocaleDateString("en-GB", {
-        day: "2-digit",
+    labels: trend.map((t) => {
+      const [year, month] = t.date.split("-");
+      const dateObj = new Date(year, month - 1);
+      return dateObj.toLocaleDateString("en-GB", {
         month: "short",
-      })
-    ),
+        year: "2-digit",
+      });
+    }),
+
     datasets: [
       {
         label: "Expenses (₹)",
