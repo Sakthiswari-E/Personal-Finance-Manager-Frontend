@@ -129,24 +129,28 @@ export default function GoalsPage() {
             onChange={handleChange}
             className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
           />
+          
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">From</label>
+            <input
+              name="startDate"
+              type="date"
+              value={form.startDate}
+              onChange={handleChange}
+              className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
+            />
+          </div>
 
-          <input
-            name="startDate"
-            type="date"
-            value={form.startDate}
-            onChange={handleChange}
-            placeholder="From Date"
-            className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
-          />
-
-          <input
-            name="endDate"
-            type="date"
-            value={form.endDate}
-            onChange={handleChange}
-            placeholder="To Date"
-            className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
-          />
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">To</label>
+            <input
+              name="endDate"
+              type="date"
+              value={form.endDate}
+              onChange={handleChange}
+              className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
+            />
+          </div>
         </div>
 
         <button
