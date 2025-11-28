@@ -87,8 +87,9 @@ export default function Reports() {
     }
   };
 
+  // Correct filtered items
   const filteredItems =
-    summary?.items?.filter((item) => {
+    summary?.summary?.items?.filter((item) => {
       const date = new Date(item.date).toISOString().split("T")[0];
       const start = startDate || "0000-01-01";
       const end = endDate || "9999-12-31";
@@ -97,12 +98,13 @@ export default function Reports() {
       return matchCategory && matchDate;
     }) || [];
 
+  // Correct daily trend chart
   const dailyTrendData = {
-    labels: summary?.dailyTrend?.map((d) => d.date) || [],
+    labels: summary?.summary?.dailyTrend?.map((d) => d.date) || [],
     datasets: [
       {
         label: "Daily Expenses (₹)",
-        data: summary?.dailyTrend?.map((d) => d.total) || [],
+        data: summary?.summary?.dailyTrend?.map((d) => d.total) || [],
         borderColor: "#14b8a6",
         backgroundColor: "rgba(20,184,166,0.3)",
         tension: 0.4,
@@ -111,12 +113,13 @@ export default function Reports() {
     ],
   };
 
+  // Correct category chart
   const categoryData = {
-    labels: summary?.byCategory?.map((c) => c.category) || [],
+    labels: summary?.summary?.byCategory?.map((c) => c.category) || [],
     datasets: [
       {
         label: "Expenses by Category",
-        data: summary?.byCategory?.map((c) => c.amount) || [],
+        data: summary?.summary?.byCategory?.map((c) => c.amount) || [],
         backgroundColor: [
           "#FF6B6B",
           "#FFD93D",
