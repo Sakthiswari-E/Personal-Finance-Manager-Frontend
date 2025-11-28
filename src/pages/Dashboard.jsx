@@ -136,25 +136,6 @@ export default function Dashboard() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // Chart configs
-  // const lineData = {
-  //   labels: trend.map((t) =>
-  //     new Date(t.date).toLocaleDateString("en-GB", {
-  //       day: "2-digit",
-  //       month: "short",
-  //     })
-  //   ),
-  //   datasets: [
-  //     {
-  //       label: "Expenses (₹)",
-  //       data: trend.map((t) => t.total || 0),
-  //       borderColor: "#14b8a6",
-  //       backgroundColor: "rgba(20,184,166,0.15)",
-  //       tension: 0.4,
-  //       fill: true,
-  //     },
-  //   ],
-  // };
   const lineData = {
     labels: trend.map((t) => {
       const cleaned = t.date.replace("/", "-").trim();
