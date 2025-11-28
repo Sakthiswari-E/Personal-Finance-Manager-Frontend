@@ -129,27 +129,41 @@ export default function GoalsPage() {
             onChange={handleChange}
             className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
           />
-          
-          <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">From</label>
-            <input
-              name="startDate"
-              type="date"
-              value={form.startDate}
-              onChange={handleChange}
-              className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
-            />
-          </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">To</label>
-            <input
-              name="endDate"
-              type="date"
-              value={form.endDate}
-              onChange={handleChange}
-              className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="startDate"
+                className="text-sm font-medium mb-1 block"
+              >
+                From
+              </label>
+              <input
+                id="startDate"
+                name="startDate"
+                type="date"
+                value={form.startDate}
+                onChange={handleChange}
+                className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none w-full"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="endDate"
+                className="text-sm font-medium mb-1 block"
+              >
+                To
+              </label>
+              <input
+                id="endDate"
+                name="endDate"
+                type="date"
+                value={form.endDate}
+                onChange={handleChange}
+                className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none w-full"
+              />
+            </div>
           </div>
         </div>
 
