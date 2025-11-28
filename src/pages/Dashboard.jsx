@@ -97,12 +97,17 @@ export default function Dashboard() {
 
       // setTrend(Array.isArray(data.dailyTrend) ? data.dailyTrend : []);
       setTrend(Array.isArray(data.trend) ? data.trend : []);
+
       setCategories(
         Array.isArray(data.byCategory)
           ? data.byCategory.map((item) => ({
               name: item.category || "Uncategorized",
-              // value: item.total || 0,
-              value: item.amount || item.total || 0,
+              value:
+                item.amount !== undefined
+                  ? item.amount
+                  : item.total !== undefined
+                  ? item.total
+                  : 0,
             }))
           : []
       );
@@ -152,8 +157,14 @@ export default function Dashboard() {
   // };
   const lineData = {
     labels: trend.map((t) => {
-      const [year, month] = t.date.split("-");
+      const cleaned = t.date.replace("/", "-").trim();
+      const parts = cleaned.split("-");
+
+      let year = parts[0];
+      let month = parts[1] || "01"; // fallback if month is missing
+
       const dateObj = new Date(year, month - 1);
+
       return dateObj.toLocaleDateString("en-GB", {
         month: "short",
         year: "2-digit",
