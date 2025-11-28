@@ -135,6 +135,7 @@ export default function GoalsPage() {
             type="date"
             value={form.startDate}
             onChange={handleChange}
+            placeholder="From Date"
             className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
           />
 
@@ -143,6 +144,7 @@ export default function GoalsPage() {
             type="date"
             value={form.endDate}
             onChange={handleChange}
+            placeholder="To Date"
             className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
           />
         </div>
