@@ -129,9 +129,9 @@ export default function GoalsPage() {
             onChange={handleChange}
             className="bg-white text-[#111B21] p-3 rounded-lg border border-[#DCDCDC] outline-none"
           />
-          
+
           <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">From</label>
+            <label className="text-sm font-medium">From</label>
             <input
               name="startDate"
               type="date"
@@ -142,7 +142,7 @@ export default function GoalsPage() {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">To</label>
+            <label className="text-sm font-medium">To</label>
             <input
               name="endDate"
               type="date"
