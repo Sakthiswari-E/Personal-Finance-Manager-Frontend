@@ -90,36 +90,66 @@ export default function Dashboard() {
     totalTargets > 0 ? ((totalSaved / totalTargets) * 100).toFixed(1) : 0;
 
   // Fetch reports correctly
-  const fetchReports = async () => {
-    try {
-      const res = await api.get("/reports/summary");
-      const data = res.data || {};
+  // const fetchReports = async () => {
+  //   try {
+  //     const res = await api.get("/reports/summary");
+  //     const data = res.data || {};
 
-      // setTrend(Array.isArray(data.dailyTrend) ? data.dailyTrend : []);
-      setTrend(Array.isArray(data.trend) ? data.trend : []);
+  //     // setTrend(Array.isArray(data.dailyTrend) ? data.dailyTrend : []);
+  //     setTrend(Array.isArray(data.trend) ? data.trend : []);
 
-      setCategories(
-        Array.isArray(data.byCategory)
-          ? data.byCategory.map((item) => ({
-              name: item.category || "Uncategorized",
-              value:
-                item.amount !== undefined
-                  ? item.amount
-                  : item.total !== undefined
-                  ? item.total
-                  : 0,
-            }))
-          : []
-      );
-    } catch (err) {
-      console.error(
-        "❌ Dashboard report fetch error:",
-        err.response?.data || err.message
-      );
-      setTrend([]);
-      setCategories([]);
-    }
-  };
+  //     setCategories(
+  //       Array.isArray(data.byCategory)
+  //         ? data.byCategory.map((item) => ({
+  //             name: item.category || "Uncategorized",
+  //             value:
+  //               item.amount !== undefined
+  //                 ? item.amount
+  //                 : item.total !== undefined
+  //                 ? item.total
+  //                 : 0,
+  //           }))
+  //         : []
+  //     );
+  //   } catch (err) {
+  //     console.error(
+  //       "❌ Dashboard report fetch error:",
+  //       err.response?.data || err.message
+  //     );
+  //     setTrend([]);
+  //     setCategories([]);
+  //   }
+  // };
+const fetchReports = async () => {
+  try {
+    const res = await api.get("/reports/summary");
+    const data = res.data?.summary || {};
+
+    setTrend(
+      Array.isArray(data.dailyTrend)
+        ? data.dailyTrend
+        : []
+    );
+
+    setCategories(
+      Array.isArray(data.byCategory)
+        ? data.byCategory.map((item) => ({
+            name: item.category || "Uncategorized",
+            value:
+              item.amount !== undefined
+                ? item.amount
+                : item.total !== undefined
+                ? item.total
+                : 0,
+          }))
+        : []
+    );
+  } catch (err) {
+    console.error("❌ Dashboard report fetch error:", err);
+    setTrend([]);
+    setCategories([]);
+  }
+};
 
   useEffect(() => {
     fetchReports();
@@ -142,8 +172,7 @@ export default function Dashboard() {
       const parts = cleaned.split("-");
 
       let year = parts[0];
-      let month = parts[1] || "01"; // fallback if month is missing
-
+      let month = parts[1] || "01"; 
       const dateObj = new Date(year, month - 1);
 
       return dateObj.toLocaleDateString("en-GB", {
