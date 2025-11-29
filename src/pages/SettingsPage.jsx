@@ -158,11 +158,6 @@ export default function SettingsPage() {
         >
           <div className="space-y-4">
             <ToggleSwitch
-              label="Email Updates"
-              checked={settings.notifications.emailUpdates}
-              onChange={(v) => handleNotificationChange("emailUpdates", v)}
-            />
-            <ToggleSwitch
               label="Budget Alerts"
               checked={settings.notifications.budgetAlerts}
               onChange={(v) => handleNotificationChange("budgetAlerts", v)}
