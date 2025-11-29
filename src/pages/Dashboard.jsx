@@ -120,27 +120,125 @@ export default function Dashboard() {
   //     setCategories([]);
   //   }
   // };
+// const fetchReports = async () => {
+//   try {
+//     const res = await api.get("/reports/summary");
+//     const data = res.data?.summary || {};
+
+//     setTrend(
+//       Array.isArray(data.dailyTrend)
+//         ? data.dailyTrend
+//         : []
+//     );
+
+//     setCategories(
+//       Array.isArray(data.byCategory)
+//         ? data.byCategory.map((item) => ({
+//             name: item.category || "Uncategorized",
+//             value:
+//               item.amount !== undefined
+//                 ? item.amount
+//                 : item.total !== undefined
+//                 ? item.total
+//                 : 0,
+//           }))
+//         : []
+//     );
+//   } catch (err) {
+//     console.error("❌ Dashboard report fetch error:", err);
+//     setTrend([]);
+//     setCategories([]);
+//   }
+// };
+
+//   useEffect(() => {
+//     fetchReports();
+//   }, [expenses]);
+
+//   useEffect(() => {
+//     const handleStorageChange = (e) => {
+//       if (["expenses_updated", "goals_updated"].includes(e.key)) {
+//         refreshData();
+//         fetchReports();
+//       }
+//     };
+//     window.addEventListener("storage", handleStorageChange);
+//     return () => window.removeEventListener("storage", handleStorageChange);
+//   }, []);
+
+//   const lineData = {
+//     labels: trend.map((t) => {
+//       const cleaned = t.date.replace("/", "-").trim();
+//       const parts = cleaned.split("-");
+
+//       let year = parts[0];
+//       let month = parts[1] || "01"; 
+//       const dateObj = new Date(year, month - 1);
+
+//       return dateObj.toLocaleDateString("en-GB", {
+//         month: "short",
+//         year: "2-digit",
+//       });
+//     }),
+
+//     datasets: [
+//       {
+//         label: "Expenses (₹)",
+//         data: trend.map((t) => t.total || 0),
+//         borderColor: "#14b8a6",
+//         backgroundColor: "rgba(20,184,166,0.15)",
+//         tension: 0.4,
+//         fill: true,
+//       },
+//     ],
+//   };
+
+//   const pieData = {
+//     labels: categories.map((c) => c.name),
+//     datasets: [
+//       {
+//         data: categories.map((c) => c.value),
+//         backgroundColor: COLORS,
+//         hoverOffset: 6,
+//       },
+//     ],
+//   };
+
+//   const recentTransactions = useMemo(
+//     () =>
+//       [...expenses]
+//         .sort((a, b) => new Date(b.date) - new Date(a.date))
+//         .slice(0, 5),
+//     [expenses]
+//   );
 const fetchReports = async () => {
   try {
     const res = await api.get("/reports/summary");
-    const data = res.data?.summary || {};
 
+    // Support both backend formats: { summary: {} } or direct {}
+    const data =
+      res.data?.summary ||
+      res.data ||
+      {};
+
+    // Trend (monthly or daily)
     setTrend(
       Array.isArray(data.dailyTrend)
         ? data.dailyTrend
+        : Array.isArray(data.trend)
+        ? data.trend
         : []
     );
 
+    // Categories
     setCategories(
       Array.isArray(data.byCategory)
         ? data.byCategory.map((item) => ({
             name: item.category || "Uncategorized",
             value:
-              item.amount !== undefined
-                ? item.amount
-                : item.total !== undefined
-                ? item.total
-                : 0,
+              item.amount ??
+              item.total ??
+              0,
           }))
         : []
     );
@@ -151,66 +249,91 @@ const fetchReports = async () => {
   }
 };
 
-  useEffect(() => {
-    fetchReports();
-  }, [expenses]);
+useEffect(() => {
+  fetchReports();
+}, [expenses]);
 
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (["expenses_updated", "goals_updated"].includes(e.key)) {
-        refreshData();
-        fetchReports();
-      }
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  const lineData = {
-    labels: trend.map((t) => {
-      const cleaned = t.date.replace("/", "-").trim();
-      const parts = cleaned.split("-");
-
-      let year = parts[0];
-      let month = parts[1] || "01"; 
-      const dateObj = new Date(year, month - 1);
-
-      return dateObj.toLocaleDateString("en-GB", {
-        month: "short",
-        year: "2-digit",
-      });
-    }),
-
-    datasets: [
-      {
-        label: "Expenses (₹)",
-        data: trend.map((t) => t.total || 0),
-        borderColor: "#14b8a6",
-        backgroundColor: "rgba(20,184,166,0.15)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
+useEffect(() => {
+  const handleStorageChange = (e) => {
+    if (["expenses_updated", "goals_updated"].includes(e.key)) {
+      refreshData();
+      fetchReports();
+    }
   };
+  window.addEventListener("storage", handleStorageChange);
+  return () => window.removeEventListener("storage", handleStorageChange);
+}, []);
 
-  const pieData = {
-    labels: categories.map((c) => c.name),
-    datasets: [
-      {
-        data: categories.map((c) => c.value),
-        backgroundColor: COLORS,
-        hoverOffset: 6,
-      },
-    ],
-  };
 
-  const recentTransactions = useMemo(
-    () =>
-      [...expenses]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5),
-    [expenses]
-  );
+// -----------------------------------------------------------
+// ⭐ AUTO-DETECT MONTHLY VS DAILY LABEL HANDLER
+// -----------------------------------------------------------
+const formatTrendLabel = (dateStr) => {
+  if (!dateStr) return "";
+
+  const d = new Date(dateStr);
+
+  // If date invalid → try fallback parsing
+  if (isNaN(d.getTime())) {
+    const tryFix = dateStr.replace(/\//g, "-").trim();
+    const d2 = new Date(tryFix);
+    if (!isNaN(d2.getTime())) return d2.toLocaleDateString("en-GB");
+    return ""; // still invalid
+  }
+
+  // If it's monthly data → usually day = 1
+  const isMonthly = d.getDate() === 1;
+
+  return d.toLocaleDateString("en-GB", {
+    month: "short",
+    ...(isMonthly ? { year: "2-digit" } : { day: "numeric" }),
+  });
+};
+
+
+// -----------------------------------------------------------
+// ⭐ LINE CHART DATA
+// -----------------------------------------------------------
+const lineData = {
+  labels: trend.map((t) => formatTrendLabel(t.date)),
+  datasets: [
+    {
+      label: "Expenses (₹)",
+      data: trend.map((t) => t.total ?? 0),
+      borderColor: "#14b8a6",
+      backgroundColor: "rgba(20,184,166,0.15)",
+      tension: 0.4,
+      fill: true,
+    },
+  ],
+};
+
+
+// -----------------------------------------------------------
+// ⭐ PIE CHART DATA
+// -----------------------------------------------------------
+const pieData = {
+  labels: categories.map((c) => c.name),
+  datasets: [
+    {
+      data: categories.map((c) => c.value),
+      backgroundColor: COLORS,
+      hoverOffset: 6,
+    },
+  ],
+};
+
+
+// -----------------------------------------------------------
+// ⭐ RECENT TRANSACTIONS
+// -----------------------------------------------------------
+const recentTransactions = useMemo(
+  () =>
+    [...expenses]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5),
+  [expenses]
+);
 
   return (
     <div className="min-h-screen p-8 bg-[#F0F2F5] text-[#111B21]">
