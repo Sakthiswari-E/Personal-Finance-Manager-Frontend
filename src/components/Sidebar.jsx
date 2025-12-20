@@ -5,6 +5,7 @@ import {
   Home,
   BarChart3,
   Wallet,
+  TrendingUp, 
   Settings,
   ClipboardList,
   Target,
@@ -22,6 +23,7 @@ export default function Sidebar() {
   const links = [
     { name: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
     { name: "Expenses", icon: <Wallet size={18} />, path: "/expenses" },
+    { name: "Income", icon: <TrendingUp size={18} />, path: "/income" },
     { name: "Budgets", icon: <ClipboardList size={18} />, path: "/budgets" },
     { name: "Reports", icon: <BarChart3 size={18} />, path: "/reports" },
     { name: "Goals", icon: <Target size={18} />, path: "/goals" },
