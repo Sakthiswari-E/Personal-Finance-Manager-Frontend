@@ -351,44 +351,6 @@ export default function Expenses() {
               </select>
             </div>
           )}
-
-          {/* Buttons */}
-          {/* <div className="p-6 rounded-2xl shadow overflow-x-auto">
-            <button
-              type="submit"
-              className="flex-1 py-2 font-semibold rounded-lg"
-              style={{
-                backgroundColor: "#24D366",
-                color: "#FFFFFF",
-              }}
-            >
-              {editingId ? "Save Changes" : "Add Expense"}
-            </button>
-
-            {editingId && (
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingId(null);
-                  setForm({
-                    amount: "",
-                    date: "",
-                    category: "",
-                    description: "",
-                    isRecurring: false,
-                    recurrenceInterval: "",
-                  });
-                }}
-                className="flex-1 py-2 font-semibold rounded-lg"
-                style={{
-                  backgroundColor: "#E6E6E6",
-                  color: "#111B21",
-                }}
-              >
-                Cancel
-              </button>
-            )}
-          </div> */}
           <div className="p-6 rounded-2xl shadow">
             <div className="flex gap-3">
               {/* Add / Save button */}

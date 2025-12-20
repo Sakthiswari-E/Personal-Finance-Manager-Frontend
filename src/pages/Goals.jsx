@@ -1,3 +1,4 @@
+//Frontend\src\pages\Goals.jsx
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import api from "../api";
@@ -211,17 +212,6 @@ export default function GoalsPage() {
                   <span>Target: ₹{g.target?.toLocaleString() || 0}</span>
                   <span>{progress}%</span>
                 </div>
-
-                {/* DATES */}
-                {/* <div className="text-xs text-[#667781] mt-1">
-                {g.startDate
-                  ? `Start: ${new Date(g.startDate).toLocaleDateString()}`
-                  : "Start: —"}{" "}
-                —{" "}
-                {g.endDate
-                  ? `Deadline: ${new Date(g.endDate).toLocaleDateString()}`
-                  : "No deadline"}
-              </div> */}
 
                 <div className="border rounded-xl px-4 py-2 bg-white flex items-center gap-6 w-fit mt-3">
                   {/* FROM (read-only) */}

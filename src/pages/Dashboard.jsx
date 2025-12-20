@@ -88,129 +88,6 @@ export default function Dashboard() {
 
   const progress =
     totalTargets > 0 ? ((totalSaved / totalTargets) * 100).toFixed(1) : 0;
-
-  // Fetch reports correctly
-  // const fetchReports = async () => {
-  //   try {
-  //     const res = await api.get("/reports/summary");
-  //     const data = res.data || {};
-
-  //     // setTrend(Array.isArray(data.dailyTrend) ? data.dailyTrend : []);
-  //     setTrend(Array.isArray(data.trend) ? data.trend : []);
-
-  //     setCategories(
-  //       Array.isArray(data.byCategory)
-  //         ? data.byCategory.map((item) => ({
-  //             name: item.category || "Uncategorized",
-  //             value:
-  //               item.amount !== undefined
-  //                 ? item.amount
-  //                 : item.total !== undefined
-  //                 ? item.total
-  //                 : 0,
-  //           }))
-  //         : []
-  //     );
-  //   } catch (err) {
-  //     console.error(
-  //       "❌ Dashboard report fetch error:",
-  //       err.response?.data || err.message
-  //     );
-  //     setTrend([]);
-  //     setCategories([]);
-  //   }
-  // };
-// const fetchReports = async () => {
-//   try {
-//     const res = await api.get("/reports/summary");
-//     const data = res.data?.summary || {};
-
-//     setTrend(
-//       Array.isArray(data.dailyTrend)
-//         ? data.dailyTrend
-//         : []
-//     );
-
-//     setCategories(
-//       Array.isArray(data.byCategory)
-//         ? data.byCategory.map((item) => ({
-//             name: item.category || "Uncategorized",
-//             value:
-//               item.amount !== undefined
-//                 ? item.amount
-//                 : item.total !== undefined
-//                 ? item.total
-//                 : 0,
-//           }))
-//         : []
-//     );
-//   } catch (err) {
-//     console.error("❌ Dashboard report fetch error:", err);
-//     setTrend([]);
-//     setCategories([]);
-//   }
-// };
-
-//   useEffect(() => {
-//     fetchReports();
-//   }, [expenses]);
-
-//   useEffect(() => {
-//     const handleStorageChange = (e) => {
-//       if (["expenses_updated", "goals_updated"].includes(e.key)) {
-//         refreshData();
-//         fetchReports();
-//       }
-//     };
-//     window.addEventListener("storage", handleStorageChange);
-//     return () => window.removeEventListener("storage", handleStorageChange);
-//   }, []);
-
-//   const lineData = {
-//     labels: trend.map((t) => {
-//       const cleaned = t.date.replace("/", "-").trim();
-//       const parts = cleaned.split("-");
-
-//       let year = parts[0];
-//       let month = parts[1] || "01"; 
-//       const dateObj = new Date(year, month - 1);
-
-//       return dateObj.toLocaleDateString("en-GB", {
-//         month: "short",
-//         year: "2-digit",
-//       });
-//     }),
-
-//     datasets: [
-//       {
-//         label: "Expenses (₹)",
-//         data: trend.map((t) => t.total || 0),
-//         borderColor: "#14b8a6",
-//         backgroundColor: "rgba(20,184,166,0.15)",
-//         tension: 0.4,
-//         fill: true,
-//       },
-//     ],
-//   };
-
-//   const pieData = {
-//     labels: categories.map((c) => c.name),
-//     datasets: [
-//       {
-//         data: categories.map((c) => c.value),
-//         backgroundColor: COLORS,
-//         hoverOffset: 6,
-//       },
-//     ],
-//   };
-
-//   const recentTransactions = useMemo(
-//     () =>
-//       [...expenses]
-//         .sort((a, b) => new Date(b.date) - new Date(a.date))
-//         .slice(0, 5),
-//     [expenses]
-//   );
 const fetchReports = async () => {
   try {
     const res = await api.get("/reports/summary");
@@ -266,7 +143,7 @@ useEffect(() => {
 
 
 // -----------------------------------------------------------
-// ⭐ AUTO-DETECT MONTHLY VS DAILY LABEL HANDLER
+// AUTO-DETECT MONTHLY VS DAILY LABEL HANDLER
 // -----------------------------------------------------------
 const formatTrendLabel = (dateStr) => {
   if (!dateStr) return "";
@@ -292,7 +169,7 @@ const formatTrendLabel = (dateStr) => {
 
 
 // -----------------------------------------------------------
-// ⭐ LINE CHART DATA
+// LINE CHART DATA
 // -----------------------------------------------------------
 const lineData = {
   labels: trend.map((t) => formatTrendLabel(t.date)),
@@ -310,7 +187,7 @@ const lineData = {
 
 
 // -----------------------------------------------------------
-// ⭐ PIE CHART DATA
+//  PIE CHART DATA
 // -----------------------------------------------------------
 const pieData = {
   labels: categories.map((c) => c.name),
@@ -325,7 +202,7 @@ const pieData = {
 
 
 // -----------------------------------------------------------
-// ⭐ RECENT TRANSACTIONS
+// RECENT TRANSACTIONS
 // -----------------------------------------------------------
 const recentTransactions = useMemo(
   () =>

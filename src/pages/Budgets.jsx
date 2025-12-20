@@ -1,3 +1,4 @@
+//Frontend\src\pages\Budgets.jsx
 import React, { useEffect, useState } from "react";
 import api from "../api";
 import { motion, AnimatePresence } from "framer-motion";
