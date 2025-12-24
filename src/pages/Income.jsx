@@ -1,156 +1,156 @@
-import React, { useEffect, useMemo, useState } from "react";
-import api from "../api";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+// import React, { useEffect, useMemo, useState } from "react";
+// import api from "../api";
+// import { Line } from "react-chartjs-2";
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Tooltip,
+//   Legend,
+// } from "chart.js";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend
-);
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Tooltip,
+//   Legend
+// );
 
-export default function Income() {
-  const [income, setIncome] = useState([]);
-  const [loading, setLoading] = useState(true);
+// export default function Income() {
+//   const [income, setIncome] = useState([]);
+//   const [loading, setLoading] = useState(true);
 
-  // Fetch income (type = income)
-  const fetchIncome = async () => {
-    try {
-      const res = await api.get("/expenses?type=income");
-      setIncome(res.data || []);
-    } catch (err) {
-      console.error("❌ Income fetch error:", err);
-      setIncome([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+//   // Fetch income (type = income)
+//   const fetchIncome = async () => {
+//     try {
+//       const res = await api.get("/expenses?type=income");
+//       setIncome(res.data || []);
+//     } catch (err) {
+//       console.error("❌ Income fetch error:", err);
+//       setIncome([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  useEffect(() => {
-    fetchIncome();
-  }, []);
+//   useEffect(() => {
+//     fetchIncome();
+//   }, []);
 
-  // Total Income
-  const totalIncome = useMemo(
-    () => income.reduce((sum, i) => sum + Number(i.amount || 0), 0),
-    [income]
-  );
+//   // Total Income
+//   const totalIncome = useMemo(
+//     () => income.reduce((sum, i) => sum + Number(i.amount || 0), 0),
+//     [income]
+//   );
 
-  // Monthly grouping
-  const monthlyIncome = useMemo(() => {
-    const map = {};
-    income.forEach((i) => {
-      const d = new Date(i.date);
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-      map[key] = (map[key] || 0) + Number(i.amount || 0);
-    });
+//   // Monthly grouping
+//   const monthlyIncome = useMemo(() => {
+//     const map = {};
+//     income.forEach((i) => {
+//       const d = new Date(i.date);
+//       const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+//       map[key] = (map[key] || 0) + Number(i.amount || 0);
+//     });
 
-    return Object.entries(map)
-      .sort()
-      .map(([date, total]) => ({ date, total }));
-  }, [income]);
+//     return Object.entries(map)
+//       .sort()
+//       .map(([date, total]) => ({ date, total }));
+//   }, [income]);
 
-  // Chart data
-  const chartData = {
-    labels: monthlyIncome.map((m) => m.date),
-    datasets: [
-      {
-        label: "Monthly Income (₹)",
-        data: monthlyIncome.map((m) => m.total),
-        borderColor: "#22c55e",
-        backgroundColor: "rgba(34,197,94,0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
+//   // Chart data
+//   const chartData = {
+//     labels: monthlyIncome.map((m) => m.date),
+//     datasets: [
+//       {
+//         label: "Monthly Income (₹)",
+//         data: monthlyIncome.map((m) => m.total),
+//         borderColor: "#22c55e",
+//         backgroundColor: "rgba(34,197,94,0.2)",
+//         tension: 0.4,
+//         fill: true,
+//       },
+//     ],
+//   };
 
-  return (
-    <div className="min-h-screen p-8 bg-[#F0F2F5]">
-      <h1 className="text-3xl font-semibold mb-6 text-[#111B21]">
-        Income Overview
-      </h1>
+//   return (
+//     <div className="min-h-screen p-8 bg-[#F0F2F5]">
+//       <h1 className="text-3xl font-semibold mb-6 text-[#111B21]">
+//         Income Overview
+//       </h1>
 
-      {loading ? (
-        <p className="text-gray-500">Loading income data...</p>
-      ) : (
-        <>
-          {/* Summary */}
-          <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
-            <h2 className="text-lg font-medium text-gray-600">
-              Total Income
-            </h2>
-            <p className="text-3xl font-bold text-green-600 mt-2">
-              ₹{totalIncome.toLocaleString()}
-            </p>
-          </div>
+//       {loading ? (
+//         <p className="text-gray-500">Loading income data...</p>
+//       ) : (
+//         <>
+//           {/* Summary */}
+//           <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
+//             <h2 className="text-lg font-medium text-gray-600">
+//               Total Income
+//             </h2>
+//             <p className="text-3xl font-bold text-green-600 mt-2">
+//               ₹{totalIncome.toLocaleString()}
+//             </p>
+//           </div>
 
-          {/* Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
-            <h2 className="text-lg font-medium mb-4 text-[#111B21]">
-              Income Growth
-            </h2>
-            {monthlyIncome.length ? (
-              <Line data={chartData} />
-            ) : (
-              <p className="text-gray-500">No income data available</p>
-            )}
-          </div>
+//           {/* Chart */}
+//           <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
+//             <h2 className="text-lg font-medium mb-4 text-[#111B21]">
+//               Income Growth
+//             </h2>
+//             {monthlyIncome.length ? (
+//               <Line data={chartData} />
+//             ) : (
+//               <p className="text-gray-500">No income data available</p>
+//             )}
+//           </div>
 
-          {/* Income Table */}
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h2 className="text-lg font-medium mb-4 text-[#111B21]">
-              Income History
-            </h2>
+//           {/* Income Table */}
+//           <div className="bg-white p-6 rounded-xl shadow-sm">
+//             <h2 className="text-lg font-medium mb-4 text-[#111B21]">
+//               Income History
+//             </h2>
 
-            {income.length === 0 ? (
-              <p className="text-gray-500">No income records found</p>
-            ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-gray-500">
-                    <th className="p-2 text-left">Date</th>
-                    <th className="p-2 text-left">Source</th>
-                    <th className="p-2 text-right">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {income.map((i) => (
-                    <tr
-                      key={i._id}
-                      className="border-b hover:bg-gray-50"
-                    >
-                      <td className="p-2">
-                        {new Date(i.date).toLocaleDateString()}
-                      </td>
-                      <td className="p-2">
-                        {i.category || "Income"}
-                      </td>
-                      <td className="p-2 text-right text-green-600">
-                        ₹{Number(i.amount).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+//             {income.length === 0 ? (
+//               <p className="text-gray-500">No income records found</p>
+//             ) : (
+//               <table className="w-full text-sm">
+//                 <thead>
+//                   <tr className="border-b text-gray-500">
+//                     <th className="p-2 text-left">Date</th>
+//                     <th className="p-2 text-left">Source</th>
+//                     <th className="p-2 text-right">Amount</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {income.map((i) => (
+//                     <tr
+//                       key={i._id}
+//                       className="border-b hover:bg-gray-50"
+//                     >
+//                       <td className="p-2">
+//                         {new Date(i.date).toLocaleDateString()}
+//                       </td>
+//                       <td className="p-2">
+//                         {i.category || "Income"}
+//                       </td>
+//                       <td className="p-2 text-right text-green-600">
+//                         ₹{Number(i.amount).toLocaleString()}
+//                       </td>
+//                     </tr>
+//                   ))}
+//                 </tbody>
+//               </table>
+//             )}
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   );
+// }
 
 
 
@@ -338,22 +338,266 @@ export default function Income() {
 
 
 
+import React, { useState, useEffect } from "react";
+import api from "../api";
 
+// ✅ Income categories (separate from expense categories)
+const INCOME_CATEGORIES = [
+  "Salary",
+  "Freelance",
+  "Business",
+  "Investment",
+  "Bonus",
+  "Other",
+];
 
-// import React from "react";
+export default function Income() {
+  const [income, setIncome] = useState([]);
+  const [form, setForm] = useState({
+    amount: "",
+    date: "",
+    category: "",
+    description: "",
+  });
+  const [editingId, setEditingId] = useState(null);
+  const [message, setMessage] = useState(null);
 
-// const Income = () => {
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-bold text-gray-800">
-//         Income Page
-//       </h1>
+  useEffect(() => {
+    fetchIncome();
+  }, []);
 
-//       <p className="mt-2 text-gray-600">
-//         Income page is rendering correctly.
-//       </p>
-//     </div>
-//   );
-// };
+  // 🔔 Alerts
+  const showAlert = (text, type = "info") => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage(null), 3000);
+  };
 
-// export default Income;
+  // 📥 Fetch income
+  const fetchIncome = async () => {
+    try {
+      const res = await api.get("/income");
+      setIncome(res.data);
+    } catch (err) {
+      console.error("❌ Error fetching income:", err);
+      showAlert("⚠️ Failed to fetch income.", "error");
+    }
+  };
+
+  // ✏️ Handle input
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // ➕ Add / ✏️ Update income
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!form.amount || !form.date || !form.category) {
+      showAlert("⚠️ Please fill required fields.", "warning");
+      return;
+    }
+
+    try {
+      if (editingId) {
+        const res = await api.put(`/income/${editingId}`, form);
+        setIncome(
+          income.map((inc) => (inc._id === editingId ? res.data : inc))
+        );
+        showAlert("✅ Income updated successfully!", "success");
+      } else {
+        const res = await api.post("/income", form);
+        setIncome([...income, res.data]);
+        showAlert("✅ Income added successfully!", "success");
+      }
+
+      setEditingId(null);
+      setForm({
+        amount: "",
+        date: "",
+        category: "",
+        description: "",
+      });
+
+      // Notify dashboard
+      localStorage.setItem("income_updated", Date.now().toString());
+    } catch (err) {
+      console.error("❌ Error saving income:", err);
+      showAlert("❌ Failed to save income.", "error");
+    }
+  };
+
+  // ✏️ Edit
+  const handleEdit = (item) => {
+    setForm({
+      amount: item.amount,
+      date: item.date?.slice(0, 10),
+      category: item.category,
+      description: item.description,
+    });
+    setEditingId(item._id);
+  };
+
+  // 🗑️ Delete
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this income?")) return;
+    try {
+      await api.delete(`/income/${id}`);
+      setIncome(income.filter((i) => i._id !== id));
+      showAlert("🗑️ Income deleted.", "info");
+      localStorage.setItem("income_updated", Date.now().toString());
+    } catch (err) {
+      console.error("❌ Error deleting income:", err);
+      showAlert("❌ Failed to delete income.", "error");
+    }
+  };
+
+  return (
+    <div className="p-6" style={{ backgroundColor: "#F0F2F5" }}>
+      <h1 className="text-2xl font-bold mb-6">
+        {editingId ? "Edit Income" : "Add Income"}
+      </h1>
+
+      {/* 🔔 Alert */}
+      {message && (
+        <div
+          className="p-3 mb-4 rounded-lg text-center font-medium text-white"
+          style={{
+            backgroundColor:
+              message.type === "success"
+                ? "#24D366"
+                : message.type === "error"
+                ? "#ff4d4f"
+                : message.type === "warning"
+                ? "#fff3cd"
+                : "#cfe2ff",
+            color: message.type === "warning" ? "#111" : "#fff",
+          }}
+        >
+          {message.text}
+        </div>
+      )}
+
+      {/* 🧾 Income Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-2xl shadow mb-6"
+      >
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          className="w-full p-2 mb-4 border rounded"
+          required
+        >
+          <option value="">Select category</option>
+          {INCOME_CATEGORIES.map((cat) => (
+            <option key={cat}>{cat}</option>
+          ))}
+        </select>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            value={form.amount}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
+          <input
+            type="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
+        </div>
+
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleChange}
+          className="w-full p-2 mb-4 border rounded"
+        />
+
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className="w-full py-2 rounded text-white font-semibold"
+            style={{ backgroundColor: "#24D366" }}
+          >
+            {editingId ? "Save Changes" : "Add Income"}
+          </button>
+
+          {editingId && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditingId(null);
+                setForm({
+                  amount: "",
+                  date: "",
+                  category: "",
+                  description: "",
+                });
+              }}
+              className="w-full py-2 rounded bg-gray-200"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+
+      {/* 📊 Income Table */}
+      <div className="bg-white p-6 rounded-2xl shadow overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b text-green-600">
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {income.length ? (
+              income.map((i) => (
+                <tr key={i._id} className="border-b hover:bg-gray-50">
+                  <td>{i.date?.slice(0, 10)}</td>
+                  <td>{i.category}</td>
+                  <td>{i.description || "—"}</td>
+                  <td className="font-semibold text-green-600">₹{i.amount}</td>
+                  <td className="space-x-2">
+                    <button
+                      onClick={() => handleEdit(i)}
+                      className="px-3 py-1 bg-blue-100 rounded"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(i._id)}
+                      className="px-3 py-1 bg-red-100 rounded"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center py-4 text-gray-500">
+                  No income recorded yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
