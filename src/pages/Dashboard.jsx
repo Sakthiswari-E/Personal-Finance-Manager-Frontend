@@ -247,7 +247,7 @@ const recentTransactions = useMemo(
 
       {loading ? (
         <div className="flex justify-center items-center h-40 text-[#667781]">
-          Loading dashboard...
+          Loading dashboard....
         </div>
       ) : (
         <>
