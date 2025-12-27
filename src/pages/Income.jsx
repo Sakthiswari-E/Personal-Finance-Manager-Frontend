@@ -337,11 +337,301 @@
 
 
 
+// //Frontend\src\pages\Income.jsx
+// import React, { useState, useEffect } from "react";
+// import api from "../api";
+
+// // Income categories (separate from expense categories)
+// const INCOME_CATEGORIES = [
+//   "Salary",
+//   "Freelance",
+//   "Business",
+//   "Investment",
+//   "Bonus",
+//   "Other",
+// ];
+
+// export default function Income() {
+//   const [income, setIncome] = useState([]);
+//   const [form, setForm] = useState({
+//     amount: "",
+//     date: "",
+//     category: "",
+//     description: "",
+//   });
+//   const [editingId, setEditingId] = useState(null);
+//   const [message, setMessage] = useState(null);
+
+//   useEffect(() => {
+//     fetchIncome();
+//   }, []);
+
+//   // 🔔 Alerts
+//   const showAlert = (text, type = "info") => {
+//     setMessage({ text, type });
+//     setTimeout(() => setMessage(null), 3000);
+//   };
+
+//   // 📥 Fetch income
+//   const fetchIncome = async () => {
+//     try {
+//       const res = await api.get("/income");
+//       setIncome(res.data);
+//     } catch (err) {
+//       console.error("❌ Error fetching income:", err);
+//       showAlert("⚠️ Failed to fetch income.", "error");
+//     }
+//   };
+
+//   // ✏️ Handle input
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   // ➕ Add / ✏️ Update income
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!form.amount || !form.date || !form.category) {
+//       showAlert("⚠️ Please fill required fields.", "warning");
+//       return;
+//     }
+
+//     try {
+//       if (editingId) {
+//         const res = await api.put(`/income/${editingId}`, form);
+//         setIncome(
+//           income.map((inc) => (inc._id === editingId ? res.data : inc))
+//         );
+//         showAlert("✅ Income updated successfully!", "success");
+//       } else {
+//         const res = await api.post("/income", form);
+//         setIncome([...income, res.data]);
+//         showAlert("✅ Income added successfully!", "success");
+//       }
+
+//       setEditingId(null);
+//       setForm({
+//         amount: "",
+//         date: "",
+//         category: "",
+//         description: "",
+//       });
+
+//       // Notify dashboard
+//       localStorage.setItem("income_updated", Date.now().toString());
+//     } catch (err) {
+//       console.error("❌ Error saving income:", err);
+//       showAlert("❌ Failed to save income.", "error");
+//     }
+//   };
+
+//   // ✏️ Edit
+//   const handleEdit = (item) => {
+//     setForm({
+//       amount: item.amount,
+//       date: item.date?.slice(0, 10),
+//       category: item.category,
+//       description: item.description,
+//     });
+//     setEditingId(item._id);
+//   };
+
+//   // 🗑️ Delete
+//   const handleDelete = async (id) => {
+//     if (!window.confirm("Delete this income?")) return;
+//     try {
+//       await api.delete(`/income/${id}`);
+//       setIncome(income.filter((i) => i._id !== id));
+//       showAlert("🗑️ Income deleted.", "info");
+//       localStorage.setItem("income_updated", Date.now().toString());
+//     } catch (err) {
+//       console.error("❌ Error deleting income:", err);
+//       showAlert("❌ Failed to delete income.", "error");
+//     }
+//   };
+
+//   return (
+//     <div className="p-6" style={{ backgroundColor: "#F0F2F5" }}>
+//       <h1 className="text-2xl font-bold mb-6">
+//         {editingId ? "Edit Income" : "Add Income"}
+//       </h1>
+
+//       {/* 🔔 Alert */}
+//       {message && (
+//         <div
+//           className="p-3 mb-4 rounded-lg text-center font-medium text-white"
+//           style={{
+//             backgroundColor:
+//               message.type === "success"
+//                 ? "#24D366"
+//                 : message.type === "error"
+//                 ? "#ff4d4f"
+//                 : message.type === "warning"
+//                 ? "#fff3cd"
+//                 : "#cfe2ff",
+//             color: message.type === "warning" ? "#111" : "#fff",
+//           }}
+//         >
+//           {message.text}
+//         </div>
+//       )}
+
+//       {/* 🧾 Income Form */}
+//       <form
+//         onSubmit={handleSubmit}
+//         className="bg-white p-6 rounded-2xl shadow mb-6"
+//       >
+//         <select
+//           name="category"
+//           value={form.category}
+//           onChange={handleChange}
+//           className="w-full p-2 mb-4 border rounded"
+//           required
+//         >
+//           <option value="">Select category</option>
+//           {INCOME_CATEGORIES.map((cat) => (
+//             <option key={cat}>{cat}</option>
+//           ))}
+//         </select>
+
+//         <div className="grid grid-cols-2 gap-4 mb-4">
+//           <input
+//             type="number"
+//             name="amount"
+//             placeholder="Amount"
+//             value={form.amount}
+//             onChange={handleChange}
+//             className="p-2 border rounded"
+//             required
+//           />
+//           <input
+//             type="date"
+//             name="date"
+//             value={form.date}
+//             onChange={handleChange}
+//             className="p-2 border rounded"
+//             required
+//           />
+//         </div>
+
+//         <textarea
+//           name="description"
+//           placeholder="Description"
+//           value={form.description}
+//           onChange={handleChange}
+//           className="w-full p-2 mb-4 border rounded"
+//         />
+
+//         <div className="flex gap-3">
+//           <button
+//             type="submit"
+//             className="w-full py-2 rounded text-white font-semibold"
+//             style={{ backgroundColor: "#24D366" }}
+//           >
+//             {editingId ? "Save Changes" : "Add Income"}
+//           </button>
+
+//           {editingId && (
+//             <button
+//               type="button"
+//               onClick={() => {
+//                 setEditingId(null);
+//                 setForm({
+//                   amount: "",
+//                   date: "",
+//                   category: "",
+//                   description: "",
+//                 });
+//               }}
+//               className="w-full py-2 rounded bg-gray-200"
+//             >
+//               Cancel
+//             </button>
+//           )}
+//         </div>
+//       </form>
+
+//       {/* 📊 Income Table */}
+//       <div className="bg-white p-6 rounded-2xl shadow overflow-x-auto">
+//         <table className="w-full">
+//           <thead>
+//             <tr className="border-b text-green-600">
+//               <th>Date</th>
+//               <th>Category</th>
+//               <th>Description</th>
+//               <th>Amount</th>
+//               <th>Actions</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {income.length ? (
+//               income.map((i) => (
+//                 <tr key={i._id} className="border-b hover:bg-gray-50">
+//                   <td>{i.date?.slice(0, 10)}</td>
+//                   <td>{i.category}</td>
+//                   <td>{i.description || "—"}</td>
+//                   <td className="font-semibold text-green-600">₹{i.amount}</td>
+//                   <td className="space-x-2">
+//                     <button
+//                       onClick={() => handleEdit(i)}
+//                       className="px-3 py-1 bg-blue-100 rounded"
+//                     >
+//                       Edit
+//                     </button>
+//                     <button
+//                       onClick={() => handleDelete(i._id)}
+//                       className="px-3 py-1 bg-red-100 rounded"
+//                     >
+//                       Delete
+//                     </button>
+//                   </td>
+//                 </tr>
+//               ))
+//             ) : (
+//               <tr>
+//                 <td colSpan="5" className="text-center py-4 text-gray-500">
+//                   No income recorded yet.
+//                 </td>
+//               </tr>
+//             )}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useState, useEffect } from "react";
 import api from "../api";
 
-// ✅ Income categories (separate from expense categories)
+/* 🎨 Same color system as Expenses page */
+const COLORS = {
+  bg: "#F0F2F5",
+  card: "#FFFFFF",
+  border: "#DCDCDC",
+  primary: "#24D366",
+  textDark: "#111B21",
+  text: "#3B4A54",
+  muted: "#667781",
+  success: "#24D366",
+  error: "#ff4d4f",
+  warning: "#fff3cd",
+  info: "#cfe2ff",
+};
+
+/* Income categories */
 const INCOME_CATEGORIES = [
   "Salary",
   "Freelance",
@@ -353,26 +643,27 @@ const INCOME_CATEGORIES = [
 
 export default function Income() {
   const [income, setIncome] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [message, setMessage] = useState(null);
+
   const [form, setForm] = useState({
     amount: "",
     date: "",
     category: "",
     description: "",
   });
-  const [editingId, setEditingId] = useState(null);
-  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     fetchIncome();
   }, []);
 
-  // 🔔 Alerts
+  /* 🔔 Alert helper */
   const showAlert = (text, type = "info") => {
     setMessage({ text, type });
     setTimeout(() => setMessage(null), 3000);
   };
 
-  // 📥 Fetch income
+  /* 📥 Fetch income */
   const fetchIncome = async () => {
     try {
       const res = await api.get("/income");
@@ -383,12 +674,12 @@ export default function Income() {
     }
   };
 
-  // ✏️ Handle input
+  /* ✏️ Input change */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ➕ Add / ✏️ Update income
+  /* ➕ Add / ✏️ Update income */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -401,7 +692,7 @@ export default function Income() {
       if (editingId) {
         const res = await api.put(`/income/${editingId}`, form);
         setIncome(
-          income.map((inc) => (inc._id === editingId ? res.data : inc))
+          income.map((i) => (i._id === editingId ? res.data : i))
         );
         showAlert("✅ Income updated successfully!", "success");
       } else {
@@ -418,7 +709,6 @@ export default function Income() {
         description: "",
       });
 
-      // Notify dashboard
       localStorage.setItem("income_updated", Date.now().toString());
     } catch (err) {
       console.error("❌ Error saving income:", err);
@@ -426,20 +716,21 @@ export default function Income() {
     }
   };
 
-  // ✏️ Edit
+  /* ✏️ Edit income */
   const handleEdit = (item) => {
+    setEditingId(item._id);
     setForm({
       amount: item.amount,
       date: item.date?.slice(0, 10),
       category: item.category,
-      description: item.description,
+      description: item.description || "",
     });
-    setEditingId(item._id);
   };
 
-  // 🗑️ Delete
+  /* 🗑️ Delete income */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this income?")) return;
+
     try {
       await api.delete(`/income/${id}`);
       setIncome(income.filter((i) => i._id !== id));
@@ -452,25 +743,29 @@ export default function Income() {
   };
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#F0F2F5" }}>
-      <h1 className="text-2xl font-bold mb-6">
+    <div
+      className="p-6"
+      style={{ backgroundColor: COLORS.bg, color: COLORS.text }}
+    >
+      {/* Header */}
+      <h1 className="text-2xl font-bold mb-6" style={{ color: COLORS.textDark }}>
         {editingId ? "Edit Income" : "Add Income"}
       </h1>
 
       {/* 🔔 Alert */}
       {message && (
         <div
-          className="p-3 mb-4 rounded-lg text-center font-medium text-white"
+          className="p-3 mb-4 rounded-lg text-center font-medium"
           style={{
             backgroundColor:
               message.type === "success"
-                ? "#24D366"
+                ? COLORS.success
                 : message.type === "error"
-                ? "#ff4d4f"
+                ? COLORS.error
                 : message.type === "warning"
-                ? "#fff3cd"
-                : "#cfe2ff",
-            color: message.type === "warning" ? "#111" : "#fff",
+                ? COLORS.warning
+                : COLORS.info,
+            color: message.type === "warning" ? COLORS.textDark : "#FFFFFF",
           }}
         >
           {message.text}
@@ -480,20 +775,36 @@ export default function Income() {
       {/* 🧾 Income Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-2xl shadow mb-6"
+        className="p-6 rounded-2xl shadow mb-6"
+        style={{
+          backgroundColor: COLORS.card,
+          border: `1px solid ${COLORS.border}`,
+        }}
       >
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        >
-          <option value="">Select category</option>
-          {INCOME_CATEGORIES.map((cat) => (
-            <option key={cat}>{cat}</option>
-          ))}
-        </select>
+        <div className="mb-4">
+          <label className="block mb-1 text-sm" style={{ color: COLORS.muted }}>
+            Category
+          </label>
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            className="w-full p-2 rounded-lg border"
+            style={{
+              backgroundColor: COLORS.card,
+              borderColor: COLORS.border,
+              color: COLORS.text,
+            }}
+            required
+          >
+            <option value="">Select category</option>
+            {INCOME_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <input
@@ -502,7 +813,12 @@ export default function Income() {
             placeholder="Amount"
             value={form.amount}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="p-2 rounded-lg border"
+            style={{
+              backgroundColor: COLORS.card,
+              borderColor: COLORS.border,
+              color: COLORS.text,
+            }}
             required
           />
           <input
@@ -510,7 +826,12 @@ export default function Income() {
             name="date"
             value={form.date}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="p-2 rounded-lg border"
+            style={{
+              backgroundColor: COLORS.card,
+              borderColor: COLORS.border,
+              color: COLORS.text,
+            }}
             required
           />
         </div>
@@ -520,14 +841,22 @@ export default function Income() {
           placeholder="Description"
           value={form.description}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full mb-4 p-2 rounded-lg border"
+          style={{
+            backgroundColor: COLORS.card,
+            borderColor: COLORS.border,
+            color: COLORS.text,
+          }}
         />
 
         <div className="flex gap-3">
           <button
             type="submit"
-            className="w-full py-2 rounded text-white font-semibold"
-            style={{ backgroundColor: "#24D366" }}
+            className="w-full py-2.5 font-semibold rounded-lg"
+            style={{
+              backgroundColor: COLORS.primary,
+              color: "#FFFFFF",
+            }}
           >
             {editingId ? "Save Changes" : "Add Income"}
           </button>
@@ -544,7 +873,11 @@ export default function Income() {
                   description: "",
                 });
               }}
-              className="w-full py-2 rounded bg-gray-200"
+              className="w-full py-2.5 font-semibold rounded-lg"
+              style={{
+                backgroundColor: "#E6E6E6",
+                color: COLORS.textDark,
+              }}
             >
               Cancel
             </button>
@@ -553,35 +886,63 @@ export default function Income() {
       </form>
 
       {/* 📊 Income Table */}
-      <div className="bg-white p-6 rounded-2xl shadow overflow-x-auto">
+      <div
+        className="p-6 rounded-2xl shadow overflow-x-auto"
+        style={{
+          backgroundColor: COLORS.card,
+          border: `1px solid ${COLORS.border}`,
+        }}
+      >
         <table className="w-full">
           <thead>
-            <tr className="border-b text-green-600">
-              <th>Date</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Actions</th>
+            <tr
+              style={{
+                color: COLORS.primary,
+                borderBottom: "1px solid #E6E6E6",
+              }}
+            >
+              <th className="py-2 text-left">Date</th>
+              <th className="py-2 text-left">Category</th>
+              <th className="py-2 text-left">Description</th>
+              <th className="py-2 text-left">Amount</th>
+              <th className="py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {income.length ? (
               income.map((i) => (
-                <tr key={i._id} className="border-b hover:bg-gray-50">
-                  <td>{i.date?.slice(0, 10)}</td>
-                  <td>{i.category}</td>
-                  <td>{i.description || "—"}</td>
-                  <td className="font-semibold text-green-600">₹{i.amount}</td>
-                  <td className="space-x-2">
+                <tr
+                  key={i._id}
+                  className="hover:bg-[#F5F5F5]"
+                  style={{ borderBottom: "1px solid #E6E6E6" }}
+                >
+                  <td className="py-2">{i.date?.slice(0, 10)}</td>
+                  <td className="py-2">{i.category}</td>
+                  <td className="py-2">{i.description || "—"}</td>
+                  <td
+                    className="py-2 font-semibold"
+                    style={{ color: COLORS.primary }}
+                  >
+                    ₹{i.amount}
+                  </td>
+                  <td className="py-2 text-center space-x-2">
                     <button
                       onClick={() => handleEdit(i)}
-                      className="px-3 py-1 bg-blue-100 rounded"
+                      className="px-3 py-1 text-sm rounded"
+                      style={{
+                        backgroundColor: "#cfe2ff",
+                        color: COLORS.textDark,
+                      }}
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(i._id)}
-                      className="px-3 py-1 bg-red-100 rounded"
+                      className="px-3 py-1 text-sm rounded"
+                      style={{
+                        backgroundColor: "#ffdddd",
+                        color: COLORS.textDark,
+                      }}
                     >
                       Delete
                     </button>
@@ -590,7 +951,11 @@ export default function Income() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
+                <td
+                  colSpan="5"
+                  className="text-center py-4"
+                  style={{ color: COLORS.muted }}
+                >
                   No income recorded yet.
                 </td>
               </tr>
