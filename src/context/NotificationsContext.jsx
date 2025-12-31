@@ -11,21 +11,42 @@ export const NotificationsProvider = ({ children }) => {
   const lastUpdateRef = useRef(0);
 
   // ---- Fetch Notifications ---- //
-  const fetchNotifications = async () => {
-    try {
-      const res = await api.get("/notifications");
-      const data = res.data || [];
+  // const fetchNotifications = async () => {
+  //   try {
+  //     const res = await api.get("/notifications");
+  //     const data = res.data || [];
 
-      if (Date.now() - lastUpdateRef.current < 800) return;
+  //     if (Date.now() - lastUpdateRef.current < 800) return;
 
-      setNotifications(data);
-      setUnreadCount(data.filter((n) => !n.isRead).length);
-      setLoading(false);
-    } catch (error) {
-      console.error("Failed to fetch notifications:", error);
-      setLoading(false);
-    }
-  };
+  //     setNotifications(data);
+  //     setUnreadCount(data.filter((n) => !n.isRead).length);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Failed to fetch notifications:", error);
+  //     setLoading(false);
+  //   }
+  // };
+
+const fetchNotifications = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const res = await api.get("/notifications");
+    const data = res.data || [];
+
+    setNotifications(data);
+    setUnreadCount(data.filter(n => !n.isRead).length);
+  } catch (err) {
+    console.error("Notifications error:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // ---- Mark one ---- //
   const markAsRead = async (id) => {

@@ -678,7 +678,7 @@
 
 
 
-
+//Frontend\src\pages\Goals.jsx
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import api from "../api";
@@ -715,24 +715,42 @@ export default function GoalsPage() {
         (g) => normalize(g.name) === normalize(form.name)
       );
 
-      if (existing && !editingId) {
-        // ➕ ADD TO EXISTING GOAL
-        await api.put(`/goals/${existing._id}`, {
-          saved: Number(existing.saved || 0) + Number(form.saved || 0),
+      // if (existing && !editingId) {
+      //   // ➕ ADD TO EXISTING GOAL
+      //   await api.put(`/goals/${existing._id}`, {
+      //     saved: Number(existing.saved || 0) + Number(form.saved || 0),
+      //   });
+      // } else if (editingId) {
+      //   // ✏️ EDIT GOAL
+      //   await api.put(`/goals/${editingId}`, {
+      //     ...form,
+      //     saved: Number(form.saved || 0),
+      //   });
+      // } else {
+      //   // 🆕 CREATE NEW
+      //   await api.post("/goals", {
+      //     ...form,
+      //     saved: Number(form.saved || 0),
+      //   });
+      // }
+      if (existing && !editingId && form.saved) {
+        await api.put(`/goals/${existing._id}/add`, {
+          amount: Number(form.saved),
         });
       } else if (editingId) {
-        // ✏️ EDIT GOAL
         await api.put(`/goals/${editingId}`, {
-          ...form,
-          saved: Number(form.saved || 0),
+          name: form.name,
+          target: Number(form.target),
+          category: form.category,
         });
       } else {
-        // 🆕 CREATE NEW
         await api.post("/goals", {
-          ...form,
-          saved: Number(form.saved || 0),
+          name: form.name,
+          target: Number(form.target),
+          category: form.category,
         });
       }
+
 
       setForm({ name: "", target: "", saved: "", category: "" });
       setEditingId(null);
