@@ -705,8 +705,10 @@ export default function GoalsPage() {
 
   // ✅ ADD / UPDATE LOGIC
   const handleSubmit = async () => {
-    if (!form.name || !form.target)
-      return alert("Goal name & target required");
+    if (!form.name || !form.target) {
+      alert("Goal name & target required");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -715,42 +717,36 @@ export default function GoalsPage() {
         (g) => normalize(g.name) === normalize(form.name)
       );
 
-      // if (existing && !editingId) {
-      //   // ➕ ADD TO EXISTING GOAL
-      //   await api.put(`/goals/${existing._id}`, {
-      //     saved: Number(existing.saved || 0) + Number(form.saved || 0),
-      //   });
-      // } else if (editingId) {
-      //   // ✏️ EDIT GOAL
-      //   await api.put(`/goals/${editingId}`, {
-      //     ...form,
-      //     saved: Number(form.saved || 0),
-      //   });
-      // } else {
-      //   // 🆕 CREATE NEW
-      //   await api.post("/goals", {
-      //     ...form,
-      //     saved: Number(form.saved || 0),
-      //   });
-      // }
-      if (existing && !editingId && form.saved) {
+      const addAmount =
+        form.saved !== "" && !isNaN(form.saved)
+          ? Number(form.saved)
+          : 0;
+
+      // ✅ EXISTING GOAL → ADD AMOUNT
+      if (existing && !editingId && addAmount > 0) {
         await api.put(`/goals/${existing._id}/add`, {
-          amount: Number(form.saved),
+          amount: addAmount,
         });
-      } else if (editingId) {
+      }
+
+      // ✏️ EDIT GOAL
+      else if (editingId) {
         await api.put(`/goals/${editingId}`, {
-          name: form.name,
-          target: Number(form.target),
-          category: form.category,
-        });
-      } else {
-        await api.post("/goals", {
           name: form.name,
           target: Number(form.target),
           category: form.category,
         });
       }
 
+      // 🆕 CREATE NEW GOAL (🔥 FIX IS HERE)
+      else {
+        await api.post("/goals", {
+          name: form.name,
+          target: Number(form.target),
+          addAmount: addAmount,   // ✅ THIS WAS MISSING
+          category: form.category,
+        });
+      }
 
       setForm({ name: "", target: "", saved: "", category: "" });
       setEditingId(null);
@@ -763,6 +759,7 @@ export default function GoalsPage() {
       setLoading(false);
     }
   };
+
 
   const handleEdit = (g) => {
     setEditingId(g._id);
